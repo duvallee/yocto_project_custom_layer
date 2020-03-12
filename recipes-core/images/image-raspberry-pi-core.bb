@@ -10,6 +10,13 @@ LICENSE = "CLOSED"
 inherit core-image
 
 # ============================================================
+# add package
+IMAGE_INSTALL_append += "systemd "
+
+# prevent the SysVinit distribution feature from being automatically enabled.
+DISTRO_FEATURES_BACKFILL_CONSIDERED = "sysvinit"
+
+# ============================================================
 # add openssh & sudo package
 IMAGE_INSTALL_append += "openssh sudo "
 
