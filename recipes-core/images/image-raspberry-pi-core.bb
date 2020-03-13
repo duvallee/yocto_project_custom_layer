@@ -7,7 +7,15 @@ LICENSE = "CLOSED"
 
 # ============================================================
 # inherit from core-image
-inherit core-image
+inherit recipes-core/images/core-image-minimal.bb
+
+# ============================================================
+# Include modules in rootfs
+IMAGE_INSTALL += " \
+    kernel-modules \
+    "
+# ============================================================
+SPLASH = "psplash-raspberrypi"
 
 # ============================================================
 # add package
@@ -20,8 +28,6 @@ DISTRO_FEATURES_BACKFILL_CONSIDERED = "sysvinit"
 # add openssh & sudo package
 IMAGE_INSTALL_append += "openssh sudo "
 
-
-# ============================================================
-IMAGE_ROOTFS_EXTRA_SPACE_append = "${@bb.utils.contains("DISTRO_FEATURES", "systemd", " + 4096", "" ,d)}"
+IMAGE_INSTALL_append += "splash "
 
 
