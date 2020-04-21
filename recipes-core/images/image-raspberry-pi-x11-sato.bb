@@ -2,26 +2,26 @@
 #
 #
 
-SUMMARY = "A small image for RASPBERRY PI 3B Board"
-LICENSE = "CLOSED"
+SUMMARY = "A very basic X11 image with a terminal"
+LICENSE = "MIT"
 
 # ============================================================
 # inherit from core-image
-inherit core-image
+inherit core-image distro_features_check
 
 # ============================================================
-# init system 
-DISTRO_FEATURES_append = "systemd "
-VIRTUAL-RUNTIME_init_manager = "systemd "
+IMAGE_FEATURES += "splash package-management x11-base x11-sato "
+
+# ============================================================
 # prevent the SysVinit distribution feature from being automatically enabled.
 DISTRO_FEATURES_BACKFILL_CONSIDERED = "sysvinit"
-VIRTUAL-RUNTIME_initscripts = ""
 
 # ============================================================
 # add openssh & sudo package
 IMAGE_INSTALL_append += "openssh sudo "
 
-
+# ============================================================
+REQUIRED_DISTRO_FEATURES = "x11"
 
 
 # ============================================================

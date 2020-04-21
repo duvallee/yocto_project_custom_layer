@@ -1,0 +1,13 @@
+
+[Match]
+Name=wlp1s0u*
+KernelCommandLine=!nfsroot
+
+[Network]
+DNS=8.8.8.8
+Address=192.168.0.130
+Gateway=192.168.0.1
+
+
+
+
