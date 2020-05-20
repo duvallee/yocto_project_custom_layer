@@ -1,0 +1,16 @@
+
+[Unit]
+Description= QT Hellow World Sample Program
+After=multi-user.target
+
+[Service]
+ExecStart=/bin/bash /usr/sbin/hellow_world
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+
+
+
