@@ -53,11 +53,15 @@ IMAGE_INSTALL_append += "bluez-firmware-rpidistro-bcm43430a1-hcd "
 IMAGE_INSTALL_append += "bluez-firmware-rpidistro-bcm4345c0-hcd "
 
 # for wireless-tools (include iwconfig) & wpa-supplicant
-IMAGE_INSTALL_append += "wpa-supplicant iw packagegroup-base-wifi dhcp-client "
+IMAGE_INSTALL_append += "crda wpa-supplicant iw packagegroup-base-wifi dhcp-client "
 # IMAGE_INSTALL_append += "wireless-tools "
 
 # for module
 IMAGE_INSTALL_append += "kernel-modules " 
+
+# for multimedia
+# IMAGE_INSTALL_append += "omxplayer raspi2fb userland "
+
 
 
 
