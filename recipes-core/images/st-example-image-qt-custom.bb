@@ -55,6 +55,9 @@ CORE_IMAGE_EXTRA_INSTALL += "               \
     "
 # for QT PKGS
 CORE_IMAGE_EXTRA_INSTALL += "               \
+    qtquickcontrols                         \
+    qtquickcontrols-dev                     \
+    qtquickcontrols-qmlplugins              \
     qtquickcontrols2                        \
     qtquickcontrols2-dev                    \
     qtquickcontrols2-mkspecs                \
@@ -77,6 +80,8 @@ CORE_IMAGE_EXTRA_INSTALL += "               \
     qtscript                                \
     "
 
+
+CORE_IMAGE_EXTRA_INSTALL += " ldd "
 CORE_IMAGE_EXTRA_INSTALL += " openstlinux-qt-eglfs "
 
 
