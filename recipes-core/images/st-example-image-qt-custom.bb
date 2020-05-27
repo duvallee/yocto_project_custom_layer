@@ -1,16 +1,26 @@
+#
+#
+#
+
+# ------------------------------------------------------
 SUMMARY = "ST example of image based on Qt framework."
 LICENSE = "Proprietary"
 
+# ------------------------------------------------------
 include recipes-st/images/st-image.inc
 
+# ------------------------------------------------------
 inherit core-image distro_features_check
 
+# ------------------------------------------------------
 # let's make sure we have a good image..
 CONFLICT_DISTRO_FEATURES = "x11 wayland"
 
+# ------------------------------------------------------
 IMAGE_LINGUAS = "en-us"
 
-IMAGE_FEATURES += " \
+# ------------------------------------------------------
+IMAGE_FEATURES += "     \
     splash              \
     package-management  \
     ssh-server-dropbear \
@@ -55,10 +65,9 @@ CORE_IMAGE_EXTRA_INSTALL += "               \
     "
 # for QT PKGS
 CORE_IMAGE_EXTRA_INSTALL += "               \
-    qtquickcontrols                         \
-    qtquickcontrols-dev                     \
-    qtquickcontrols-qmlplugins              \
     qtquickcontrols2                        \
+    qtquickcontrols2-qmldesigner            \
+    qtquickcontrols2-qmlplugins             \
     qtquickcontrols2-dev                    \
     qtquickcontrols2-mkspecs                \
     "
@@ -70,6 +79,8 @@ CORE_IMAGE_EXTRA_INSTALL += "               \
     qtbase-tools                            \
     \
     qtdeclarative                           \
+    qtconnectivity-dev                      \
+    qtconnectivity-mkspecs                  \
     qtdeclarative-qmlplugins                \
     qtdeclarative-tools                     \
     \

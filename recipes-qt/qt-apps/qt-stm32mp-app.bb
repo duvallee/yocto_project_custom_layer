@@ -7,7 +7,7 @@ DESCRIPTION = "A QT Hellow World Sample Program "
 LICENSE = "CLOSED"
 
 # ----------------------------------------------------------------
-DEPENDS = "qtbase qtdeclarative"
+DEPENDS = "qtbase qtdeclarative qtquickcontrols2"
 RDEPENDS_qt-stm32mp-app_append = "bash systemd "
 
 # ----------------------------------------------------------------
@@ -28,7 +28,8 @@ S = "${WORKDIR}/git"
 # FILES_${PN} += "/lib/systemd/system/qt-hellow-world.service"
 
 # ----------------------------------------------------------------
-inherit qmake5 pkgconfig
+# inherit qmake5 pkgconfig
+require recipes-qt/qt5/qt5.inc
 
 # ----------------------------------------------------------------
 do_install() {
