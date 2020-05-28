@@ -28,8 +28,8 @@ S = "${WORKDIR}/git"
 # FILES_${PN} += "/lib/systemd/system/qt-hellow-world.service"
 
 # ----------------------------------------------------------------
-# inherit qmake5 pkgconfig
-require recipes-qt/qt5/qt5.inc
+# require recipes-qt/qt5/qt5.inc
+inherit qmake5 pkgconfig
 
 # ----------------------------------------------------------------
 do_install() {
@@ -42,6 +42,11 @@ do_install() {
 	install -m 0755 ${WORKDIR}/build/qt-swipe-view ${D}${bindir}
 #    install -m 0644 ${THISDIR}/service/qt-hellow-world.service ${D}/lib/systemd/system/
 #    ln -s /lib/systemd/system/qt-hellow-world.service ${D}/etc/systemd/system/multi-user.target.wants/qt-hellow-world.service
+
+	bbplain "SRC : ${WORKDIR}"
+	bbplain "DES : ${D}${bindir}"
+    bbplain "---------------------------------------------"
+
 }
 
 

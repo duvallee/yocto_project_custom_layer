@@ -44,6 +44,11 @@ do_install() {
 	install -m 0755 ${S}/build/hellow_world ${D}${bindir}
     install -m 0644 ${THISDIR}/service/qt-hellow-world.service ${D}/lib/systemd/system/
     ln -s /lib/systemd/system/qt-hellow-world.service ${D}/etc/systemd/system/multi-user.target.wants/qt-hellow-world.service
+
+	bbplain "SRC : ${WORKDIR}"
+	bbplain "DES : ${D}${bindir}"
+    bbplain "---------------------------------------------"
+
 }
 
 
