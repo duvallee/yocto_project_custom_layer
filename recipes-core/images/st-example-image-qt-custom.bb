@@ -98,8 +98,9 @@ CORE_IMAGE_EXTRA_INSTALL += " openstlinux-qt-eglfs "
 
 # ------------------------------------------------------
 # add sample program
-CORE_IMAGE_EXTRA_INSTALL += " qt-hellow-world"
-CORE_IMAGE_EXTRA_INSTALL += " qt-stm32mp-app"
+CORE_IMAGE_EXTRA_INSTALL += " qt-hellow-world "
+CORE_IMAGE_EXTRA_INSTALL += " qt-swipeview-sample "
+CORE_IMAGE_EXTRA_INSTALL += " qt-stm32mp-app "
 
 
 
