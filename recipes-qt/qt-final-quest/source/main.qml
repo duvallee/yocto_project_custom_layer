@@ -8,6 +8,7 @@
 import QtQuick 2.12
 import QtCharts 2.12
 import QtQuick.Layouts 1.11
+import QtQuick.Controls 2.12
 import duvallee.custom.SystemInfo 1.0
 
 // ---------------------------------------------------------------
@@ -73,161 +74,50 @@ Item
    {
       // ---------------------------------------------------------
       // size
-      x: g_system_layout_margin
-      y: g_system_layout_margin
-      width: (g_system_layout_width - (g_system_layout_margin * 2))
-      height: (g_system_layout_height - g_system_layout_margin)
+      x : 0
+      y : 0
+      width : g_system_layout_width
+      height : g_system_layout_height
 
       // ---------------------------------------------------------
-      color: "darkslategray"
-      radius: 10
-
-      // ---------------------------------------------------------
-      ColumnLayout
+      SwipeView
       {
-         spacing: 0
+         id: swipeView
+         currentIndex: 0
 
-         // ------------------------------------------------------
-         // title
-         ColumnLayout
+         anchors.fill: parent
+
+         PageSystemInformation
          {
-            Layout.leftMargin : g_system_title_left_margin
-            height: (g_system_text_alignmet * 1.2)
-
-            Text
-            {
-               Layout.alignment : Qt.AlignLeft
-               text : "System Inforamtion"
-               color : g_system_title_font_color
-               font.bold : true;
-               font.pixelSize : g_system_title_font_size
-            }
+            title: qsTr("System Information")
          }
 
-         // ------------------------------------------------------
-         ColumnLayout
+         PageCPUClock
          {
-            Layout.leftMargin: g_system_content_left_margin
-            height: g_system_text_alignmet
-            Text
-            {
-               Layout.alignment : Qt.AlignLeft
-               text : systeminfo.getCpuInfo
-               color : g_system_content_font_color
-               font.pixelSize : g_system_content_font_size
-            }
+            title: qsTr("Cpu Clock")
          }
 
-         // ------------------------------------------------------
-         ColumnLayout
+         PageMemory
          {
-            Layout.leftMargin: g_system_content_left_margin
-            height: g_system_text_alignmet
-            Text
-            {
-               text : systeminfo.getCpuArch
-               color : g_system_content_font_color
-               font.pixelSize : g_system_content_font_size
-            }
+            title: qsTr("memory")
          }
 
-         // ------------------------------------------------------
-         ColumnLayout
+         PageVersion
          {
-            Layout.leftMargin: g_system_content_left_margin
-            height: g_system_text_alignmet
-            Text
-            {
-               text : systeminfo.getCpuRev
-               color : g_system_content_font_color
-               font.pixelSize : g_system_content_font_size
-            }
+            title: qsTr("version")
          }
 
-         // ------------------------------------------------------
-         ColumnLayout
-         {
-            Layout.leftMargin: g_system_content_left_margin
-            height: g_system_text_alignmet
-            Text
-            {
-               text : systeminfo.getCpuSerial
-               color : g_system_content_font_color
-               font.pixelSize : g_system_content_font_size
-            }
-         }
-         // ------------------------------------------------------
-         ColumnLayout
-         {
-            Layout.leftMargin: g_system_content_left_margin
-            height: g_system_text_alignmet
-            Text
-            {
-               text : systeminfo.getTotalMem
-               color : g_system_content_font_color
-               font.pixelSize : g_system_content_font_size
-            }
-         }
-         // ------------------------------------------------------
-         ColumnLayout
-         {
-            Layout.leftMargin: g_system_content_left_margin
-            height: g_system_text_alignmet
-            Text
-            {
-               text : systeminfo.getCpuFreq
-               color : g_system_content_font_color
-               font.pixelSize : g_system_content_font_size
-            }
-         }
-         // ------------------------------------------------------
-         ColumnLayout
-         {
-            Layout.leftMargin: g_system_content_left_margin
-            height: g_system_text_alignmet
-            Text
-            {
-               text : systeminfo.getAvailCpuFreq
-               color : g_system_content_font_color
-               font.pixelSize : g_system_content_font_size
-            }
-         }
-         // ------------------------------------------------------
-         ColumnLayout
-         {
-            Layout.leftMargin: g_system_content_left_margin
-            height: g_system_text_alignmet
-            Text
-            {
-               text : systeminfo.getCpuGovernors
-               color : g_system_content_font_color
-               font.pixelSize : g_system_content_font_size
-            }
-         }
-         // ------------------------------------------------------
-         ColumnLayout
-         {
-            Layout.leftMargin: g_system_content_left_margin
-            height: g_system_text_alignmet
-            Text
-            {
-               text : systeminfo.getCpuAvailGovernors
-               color : g_system_content_font_color
-               font.pixelSize : g_system_content_font_size
-            }
-         }
-         // ------------------------------------------------------
-         ColumnLayout
-         {
-            Layout.leftMargin: g_system_content_left_margin
-            height: g_system_text_alignmet
-            Text
-            {
-               text : systeminfo.getIPaddress
-               color : g_system_content_font_color
-               font.pixelSize : g_system_content_font_size
-            }
-         }
+      }
+
+      PageIndicator
+      {
+         id: pageindicator
+
+         count: swipeView.count
+         currentIndex: swipeView.currentIndex
+
+         anchors.bottom: swipeView.bottom
+         anchors.horizontalCenter: parent.horizontalCenter
       }
    }
 

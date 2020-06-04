@@ -33,6 +33,9 @@
 #define MEM_AVAILABLE                                    "MemAvailable:"
 
 // --------------------------------------------------------------------------
+#define KERNEL_VERSION                                   "/proc/version"
+
+// --------------------------------------------------------------------------
 #define KERNEL_CMD_LINE                                  "/proc/cmdline"
 
 // --------------------------------------------------------------------------
@@ -69,8 +72,8 @@ SystemInfo::SystemInfo(QObject *parent) : QObject(parent)
    m_cpu_serial = QString("Unknown");
 
    m_total_mem_kb = 0;
-
-   m_kernel_cmd_line = QString("Unknown");
+   m_free_mem_kb = 0;
+   m_availed_mem_kb = 0;
 
    m_cpu_cur_freq = 0;
    m_cpu_max_freq = 0;
@@ -87,6 +90,13 @@ SystemInfo::SystemInfo(QObject *parent) : QObject(parent)
    m_cpu_0_load = 0;
    m_cpu_1_load = 0;
    m_mem_used = 0;
+
+   m_kernel_cmd_line = QString("root=/dev/mmcblk0p6 rootwait rw console=ttySTM0,115200");
+   m_kernel_version = QString("Linux version 4.19.94 (oe-user@oe-host) (gcc version 8.2.0 (GCC)) #1 SMP PREEMPT Thu Jan 9 18:19:10 KST 2020");
+   m_os_version = QString("ID=\"openstlinux-eglfs\"\nNAME=\"ST OpenSTLinux - EGLfs - (A Yocto Project Based Distro)\"\nVERSION=\"2.6-snapshot-20200602 (thud)\"\nVERSION_ID=\"2.6-snapshot-20200602\"\nPRETTY_NAME=\"ST OpenSTLinux - EGLfs - (A Yocto Project Based Distro) 2.6-snapshot-20200602 (thud)\"");
+
+   QString env_str = getenv("PATH");
+   qWarning() << env_str;
 
    // -------------------------------------------------------------------------------
    if (GetSystemInformation() == 0)
@@ -106,6 +116,8 @@ SystemInfo::SystemInfo(QObject *parent) : QObject(parent)
 
    // -------------------------------------------------------------------------------
    GetSysfs((char*) KERNEL_CMD_LINE, m_kernel_cmd_line);
+   // -------------------------------------------------------------------------------
+   GetSysfs((char*) KERNEL_VERSION, m_kernel_version);
 
    // -------------------------------------------------------------------------------
    QString cur_freq;
@@ -185,8 +197,6 @@ int SystemInfo::GetSysfs(char* sysfs, QString& retString)
          QList<QByteArray> cpuinfo_byte_arrary = array_cpuinfo.split('\n');
          QByteArray cpuinfo_byte_line;
          QString cpuinfo_string_line;
-         QString args;
-         QString param;
 
          // get from list
          cpuinfo_byte_line = cpuinfo_byte_arrary.at(0);
@@ -330,8 +340,6 @@ int SystemInfo::GetSystemMemory()
          QList<QByteArray> cpuinfo_byte_arrary = array_cpuinfo.split('\n');
          QByteArray cpuinfo_byte_line;
          QString cpuinfo_string_line;
-         uint mem_free = 0;
-         uint mem_available = 0;
 
          for (int i = 0; i < cpuinfo_byte_arrary.count(); i++)
          {
@@ -360,7 +368,7 @@ int SystemInfo::GetSystemMemory()
                {
                   if ((meminfo_byte_arrary.at(j)).toInt() != 0)
                   {
-                     mem_free = (meminfo_byte_arrary.at(j)).toInt();
+                     m_free_mem_kb = (meminfo_byte_arrary.at(j)).toInt();
                   }
                }
             }
@@ -370,10 +378,10 @@ int SystemInfo::GetSystemMemory()
                {
                   if ((meminfo_byte_arrary.at(j)).toInt() != 0)
                   {
-                     mem_available = (meminfo_byte_arrary.at(j)).toInt();
+                     m_availed_mem_kb = (meminfo_byte_arrary.at(j)).toInt();
                   }
                }
-               m_mem_used = ((m_total_mem_kb - mem_available) * 100) / m_total_mem_kb;
+               m_mem_used = ((m_total_mem_kb - m_availed_mem_kb) * 100) / m_total_mem_kb;
             }
          }
 
@@ -490,16 +498,13 @@ int SystemInfo::GetCPULoad()
 
 
 // --------------------------------------------------------------------------
-//  Name : getCpuInfo()
+//  Name : getCpuNum()
 //
 //
 // --------------------------------------------------------------------------
-QString SystemInfo::getCpuInfo()
+uint SystemInfo::getCpuNum()
 {
-   QString cpuinfo;
-   cpuinfo.sprintf("CORE : %d", m_cpu_num);
-
-   return cpuinfo;
+   return m_cpu_num;
 }
 
 // --------------------------------------------------------------------------
@@ -509,12 +514,7 @@ QString SystemInfo::getCpuInfo()
 // --------------------------------------------------------------------------
 QString SystemInfo::getCpuArch()
 {
-   QString archinfo;
-   archinfo = "ARCH : " + m_cpu_arch;
-
-   qWarning() << archinfo;
-
-   return archinfo;
+   return m_cpu_arch;
 }
 
 // --------------------------------------------------------------------------
@@ -524,10 +524,7 @@ QString SystemInfo::getCpuArch()
 // --------------------------------------------------------------------------
 QString SystemInfo::getCpuRev()
 {
-   QString cpurevinfo;
-   cpurevinfo = "CPU REV. : " + m_cpu_rev;
-
-   return cpurevinfo;
+   return m_cpu_rev;
 }
 
 // --------------------------------------------------------------------------
@@ -537,10 +534,7 @@ QString SystemInfo::getCpuRev()
 // --------------------------------------------------------------------------
 QString SystemInfo::getCpuSerial()
 {
-   QString cpuserinfo;
-   cpuserinfo = "CPU SER. : " + m_cpu_serial;
-
-   return cpuserinfo;
+   return m_cpu_serial;
 }
 
 // --------------------------------------------------------------------------
@@ -548,12 +542,22 @@ QString SystemInfo::getCpuSerial()
 //
 //
 // --------------------------------------------------------------------------
-QString SystemInfo::getTotalMem()
+uint SystemInfo::getTotalMem()
 {
-   QString meminfo;
-   meminfo.sprintf("TOTAL MEM : %d kB", m_total_mem_kb);
+   return m_total_mem_kb;
+}
 
-   return meminfo;
+// --------------------------------------------------------------------------
+//  Name : getTotalMem()
+//
+//
+// --------------------------------------------------------------------------
+uint SystemInfo::getFreeMem()
+{
+   if (GetSystemMemory() != 0)
+   {
+   }
+   return m_free_mem_kb;
 }
 
 // --------------------------------------------------------------------------
@@ -561,12 +565,29 @@ QString SystemInfo::getTotalMem()
 //
 //
 // --------------------------------------------------------------------------
-QString SystemInfo::getCpuFreq()
+uint SystemInfo::getCpuFreq()
 {
-   QString freqinfo;
-   freqinfo.sprintf("FREQ(MHz) : %d (%d ~ %d)", m_cpu_cur_freq / 1000, m_cpu_min_freq / 1000, m_cpu_max_freq / 1000);
+   return m_cpu_cur_freq;
+}
 
-   return freqinfo;
+// --------------------------------------------------------------------------
+//  Name : getMinFreq()
+//
+//
+// --------------------------------------------------------------------------
+uint SystemInfo::getMinFreq()
+{
+   return m_cpu_min_freq;
+}
+
+// --------------------------------------------------------------------------
+//  Name : getMaxFreq()
+//
+//
+// --------------------------------------------------------------------------
+uint SystemInfo::getMaxFreq()
+{
+   return m_cpu_max_freq;
 }
 
 // --------------------------------------------------------------------------
@@ -576,10 +597,7 @@ QString SystemInfo::getCpuFreq()
 // --------------------------------------------------------------------------
 QString SystemInfo::getAvailCpuFreq()
 {
-   QString availfreqinfo;
-   availfreqinfo = "AVIL. FREQ(kHz) : " + m_available_freq;
-
-   return availfreqinfo;
+   return m_available_freq;
 }
 
 
@@ -590,10 +608,7 @@ QString SystemInfo::getAvailCpuFreq()
 // --------------------------------------------------------------------------
 QString SystemInfo::getCpuGovernors()
 {
-   QString governorinfo;
-   governorinfo = "CPU Governor : " + m_cur_goverors;
-
-   return governorinfo;
+   return m_cur_goverors;
 }
 
 // --------------------------------------------------------------------------
@@ -603,10 +618,7 @@ QString SystemInfo::getCpuGovernors()
 // --------------------------------------------------------------------------
 QString SystemInfo::getCpuAvailGovernors()
 {
-   QString availgovernorinfo;
-   availgovernorinfo = "AVAIL. Gove. : " + m_available_governors;
-
-   return availgovernorinfo;
+   return m_available_governors;
 }
 
 // --------------------------------------------------------------------------
@@ -616,10 +628,7 @@ QString SystemInfo::getCpuAvailGovernors()
 // --------------------------------------------------------------------------
 QString SystemInfo::getIPaddress()
 {
-   QString ipinfo;
-   ipinfo = "IPv4 ADDR. : " + m_ipaddress;
-
-   return ipinfo;
+   return m_ipaddress;
 }
 
 // --------------------------------------------------------------------------
@@ -655,7 +664,7 @@ uint SystemInfo::getCpuLoadValue()
       m_cpu_0_load = (QRandomGenerator::global()->generate() % 100);
       m_cpu_1_load = (QRandomGenerator::global()->generate() % 100);
    }
-   qWarning("LOAD : %d %, %d %, %d % \n", m_cpu_load, m_cpu_0_load, m_cpu_1_load);
+//   qWarning("LOAD : %d %, %d %, %d % \n", m_cpu_load, m_cpu_0_load, m_cpu_1_load);
 
    return m_cpu_load;
 }
@@ -692,9 +701,38 @@ uint SystemInfo::getMemUsedValue()
    {
       m_mem_used = (QRandomGenerator::global()->generate() % 100);
    }
-   qWarning("MEM : %d % \n", m_mem_used);
+//   qWarning("MEM : %d % \n", m_mem_used);
    return m_mem_used;
 }
 
+// --------------------------------------------------------------------------
+//  Name : getMemUsedValue()
+//
+//
+// --------------------------------------------------------------------------
+QString SystemInfo::getKernelVersion()
+{
+   return m_kernel_version;
+}
+
+// --------------------------------------------------------------------------
+//  Name : getMemUsedValue()
+//
+//
+// --------------------------------------------------------------------------
+QString SystemInfo::getKernelCmdLine()
+{
+   return m_kernel_cmd_line;
+}
+
+// --------------------------------------------------------------------------
+//  Name : getMemUsedValue()
+//
+//
+// --------------------------------------------------------------------------
+QString SystemInfo::getOSVersion()
+{
+   return m_os_version;
+}
 
 

@@ -15,6 +15,10 @@ SRC_URI ?=  ""
 
 # qml
 SRC_URI += "file://main.qml "
+SRC_URI += "file://PageSystemInformation.qml "
+SRC_URI += "file://PageCPUClock.qml "
+SRC_URI += "file://PageMemory.qml "
+SRC_URI += "file://PageVersion.qml "
 
 # image
 

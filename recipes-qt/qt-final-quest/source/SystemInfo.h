@@ -18,17 +18,22 @@ class SystemInfo : public QObject
    Q_OBJECT
 
    // -------------------------------------------------------------------------------
-   Q_PROPERTY(QString getCpuInfo READ getCpuInfo CONSTANT)
+   Q_PROPERTY(uint getCpuNum READ getCpuNum CONSTANT)
    Q_PROPERTY(QString getCpuArch READ getCpuArch CONSTANT)
    Q_PROPERTY(QString getCpuRev READ getCpuRev CONSTANT)
    Q_PROPERTY(QString getCpuSerial READ getCpuSerial CONSTANT)
-   Q_PROPERTY(QString getTotalMem READ getTotalMem CONSTANT)
 
-   Q_PROPERTY(QString getCpuFreq READ getCpuFreq CONSTANT)
+   Q_PROPERTY(uint getCpuFreq READ getCpuFreq CONSTANT)
+   Q_PROPERTY(uint getMinFreq READ getMinFreq CONSTANT)
+   Q_PROPERTY(uint getMaxFreq READ getMaxFreq CONSTANT)
+
    Q_PROPERTY(QString getAvailCpuFreq READ getAvailCpuFreq CONSTANT)
 
    Q_PROPERTY(QString getCpuGovernors READ getCpuGovernors CONSTANT)
    Q_PROPERTY(QString getCpuAvailGovernors READ getCpuAvailGovernors CONSTANT)
+
+   Q_PROPERTY(uint getTotalMem READ getTotalMem CONSTANT)
+   Q_PROPERTY(uint getFreeMem READ getFreeMem CONSTANT)
 
    Q_PROPERTY(QString getIPaddress READ getIPaddress CONSTANT)
 
@@ -39,22 +44,32 @@ class SystemInfo : public QObject
    Q_PROPERTY(uint getCpu_1_LoadValue READ getCpu_1_LoadValue)
    Q_PROPERTY(uint getMemUsedValue READ getMemUsedValue)
 
+   // -------------------------------------------------------------------------------
+   Q_PROPERTY(QString getKernelVersion READ getKernelVersion CONSTANT)
+   Q_PROPERTY(QString getKernelCmdLine READ getKernelCmdLine CONSTANT)
+   Q_PROPERTY(QString getOSVersion READ getOSVersion CONSTANT)
 
 // ==================================================================================
 public:
    explicit SystemInfo(QObject* parent = nullptr);
 
    // ----------------------------------------------------------------------------------
-   QString getCpuInfo();
+   uint getCpuNum();
    QString getCpuArch();
    QString getCpuRev();
    QString getCpuSerial();
-   QString getTotalMem();
-   QString getCpuFreq();
+
+   uint getCpuFreq();
+   uint getMinFreq();
+   uint getMaxFreq();
+
    QString getAvailCpuFreq();
 
    QString getCpuGovernors();
    QString getCpuAvailGovernors();
+
+   uint getTotalMem();
+   uint getFreeMem();
 
    QString getIPaddress();
 
@@ -65,6 +80,11 @@ public:
    uint getCpu_1_LoadValue();
    uint getMemUsedValue();
 
+   // -------------------------------------------------------------------------------
+   QString getKernelVersion();
+   QString getKernelCmdLine();
+   QString getOSVersion();
+
 
 // ==================================================================================
 signals:
@@ -72,18 +92,14 @@ signals:
 // ==================================================================================
 private:
    // ----------------------------------------------------------------------------------
-   int m_cpu_num;
+   uint m_cpu_num;
    QString m_cpu_arch;
    QString m_cpu_rev;
    QString m_cpu_serial;
 
-   int m_total_mem_kb;
-
-   QString m_kernel_cmd_line;
-
-   int m_cpu_cur_freq;
-   int m_cpu_max_freq;
-   int m_cpu_min_freq;
+   uint m_cpu_cur_freq;
+   uint m_cpu_max_freq;
+   uint m_cpu_min_freq;
 
    QString m_available_freq;
    QString m_available_governors;
@@ -91,12 +107,21 @@ private:
 
    QString m_ipaddress;
 
+   uint m_total_mem_kb;
+   uint m_free_mem_kb;
+   uint m_availed_mem_kb;
+
    //
    uint m_temperature;
    uint m_cpu_load;
    uint m_cpu_0_load;
    uint m_cpu_1_load;
    uint m_mem_used;
+
+   //
+   QString m_kernel_cmd_line;
+   QString m_kernel_version;
+   QString m_os_version;
 
    // ----------------------------------------------------------------------------------
    int GetSysfs(char*, QString&);
