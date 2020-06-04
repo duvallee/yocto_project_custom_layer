@@ -97,6 +97,15 @@ CORE_IMAGE_EXTRA_INSTALL += "               \
     qtcharts-mkspecs                        \
     "
 
+CORE_IMAGE_EXTRA_INSTALL += "               \
+    ttf-dejavu-sans                         \
+    ttf-dejavu-sans-mono                    \
+    ttf-dejavu-sans-condensed               \
+    ttf-dejavu-serif                        \
+    ttf-dejavu-serif-condensed              \
+    ttf-dejavu-common                       \
+    "
+
 CORE_IMAGE_EXTRA_INSTALL += " ldd "
 CORE_IMAGE_EXTRA_INSTALL += " openstlinux-qt-eglfs "
 
