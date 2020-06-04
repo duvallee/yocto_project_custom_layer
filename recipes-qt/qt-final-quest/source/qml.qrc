@@ -1,10 +1,6 @@
 <RCC>
    <qresource prefix="/">
       <file>main.qml</file>
-      <file>Home_System_Information.qml</file>
-      <file>CpuMonitoring.qml</file>
-      <file>ThermalMonitoring.qml</file>
-      <file>SystemMonitoring.qml</file>
       <file>qtquickcontrols2.conf</file>
    </qresource>
 </RCC>

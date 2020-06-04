@@ -7,6 +7,8 @@
 
 # -----------------------------------------------
 QT += quick
+QT += charts
+QT += network
 
 # -----------------------------------------------
 CONFIG += c++11
@@ -36,6 +38,7 @@ SOURCES += \
         cputhermalmonitoring.cpp  \
         cpumonitoring.cpp  \
         systemmonitoring.cpp  \
+
 
 # -----------------------------------------------
 RESOURCES += qml.qrc

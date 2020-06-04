@@ -10,7 +10,7 @@ LICENSE = "Proprietary"
 include recipes-st/images/st-image.inc
 
 # ------------------------------------------------------
-inherit core-image distro_features_check
+inherit core-image distro_features_check populate_sdk_qt5
 
 # ------------------------------------------------------
 # let's make sure we have a good image..
@@ -90,7 +90,12 @@ CORE_IMAGE_EXTRA_INSTALL += "               \
     \
     qtscript                                \
     "
-
+# for QT PKGS(from st)
+CORE_IMAGE_EXTRA_INSTALL += "               \
+    qtcharts                                \
+    qtcharts-dev                            \
+    qtcharts-mkspecs                        \
+    "
 
 CORE_IMAGE_EXTRA_INSTALL += " ldd "
 CORE_IMAGE_EXTRA_INSTALL += " openstlinux-qt-eglfs "

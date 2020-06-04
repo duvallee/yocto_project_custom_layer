@@ -5,14 +5,55 @@
 // Written by duvallee in 2020
 //
 // ****************************************************************
+#include <QDebug>
+#include <QNetworkInterface>
+
+#include <QRandomGenerator>
+
 #include "SystemInfo.h"
 
 // --------------------------------------------------------------------------
-// #define CPU_INFO_PATH                                    "/proc/cpuinfo"
-#define CPU_INFO_PATH                                    "cpuinfo.txt"
+#define CPU_INFO_PATH                                    "/proc/cpuinfo"
 
 #define CPU_INFO_PROCESSOR                               "processor"
 #define CPU_INFO_MODEL                                   "model name"
+#define CPU_INFO_REVISION                                "Revision"
+#define CPU_INFO_SERIAL                                  "Serial"
+
+// --------------------------------------------------------------------------
+#define CPU_STAT_PATH                                    "/proc/stat"
+#define CPU_STAT_CPU                                     "cpu"
+#define CPU_STAT_CPU0                                    "cpu0"
+#define CPU_STAT_CPU1                                    "cpu1"
+
+// --------------------------------------------------------------------------
+#define MEM_INFO_PATH                                    "/proc/meminfo"
+#define MEM_TOTAL                                        "MemTotal:"
+#define MEM_FREE                                         "MemFree:"
+#define MEM_AVAILABLE                                    "MemAvailable:"
+
+// --------------------------------------------------------------------------
+#define KERNEL_CMD_LINE                                  "/proc/cmdline"
+
+// --------------------------------------------------------------------------
+#define CPU_CUR_FREQ                                     "/sys/devices/system/cpu/cpufreq/policy0/cpuinfo_cur_freq" 
+#define CPU_MAX_FREQ                                     "/sys/devices/system/cpu/cpufreq/policy0/cpuinfo_max_freq" 
+#define CPU_MIN_FREQ                                     "/sys/devices/system/cpu/cpufreq/policy0/cpuinfo_min_freq" 
+
+#define CPU_AVAILABLE_FREQ                               "/sys/devices/system/cpu/cpufreq/policy0/scaling_available_frequencies" 
+#define CPU_AVAILABLE_GOVERNORS                          "/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors" 
+#define CPU_CUR_GOVERNORS                                "/sys/devices/system/cpu/cpufreq/policy0/scaling_governor" 
+
+// --------------------------------------------------------------------------
+#define CPU_THERMAL_TEMP                                 "/sys/class/thermal/thermal_zone0/temp"
+#define CPU_THERMAL_TYPE                                 "/sys/class/thermal/thermal_zone0/type" 
+
+#define CPU_THERMAL_TRIP_HYST                            "/sys/class/thermal/trip_point_0_hyst" 
+#define CPU_THERMAL_TRIP_TEMP                            "/sys/class/thermal/trip_point_0_temp" 
+#define CPU_THERMAL_TRIP_TYPE                            "/sys/class/thermal/trip_point_0_type" 
+
+// --------------------------------------------------------------------------
+#define CPU_LOADAVG_PATH                                 "/proc/loadavg"
 
 // --------------------------------------------------------------------------
 //  Name : SystemInfo()
@@ -22,79 +63,431 @@
 SystemInfo::SystemInfo(QObject *parent) : QObject(parent)
 {
    // -------------------------------------------------------------------------------
-   QFile qfile;
-   FILE*  file = NULL;
+   m_cpu_num = 0;
+   m_cpu_arch = QString("Unknown");
+   m_cpu_rev = QString("Unknown");
+   m_cpu_serial = QString("Unknown");
 
-   QString cpu_architecture_string = "unknown processor";
-   int cpu_core_num = 0;
+   m_total_mem_kb = 0;
+
+   m_kernel_cmd_line = QString("Unknown");
+
+   m_cpu_cur_freq = 0;
+   m_cpu_max_freq = 0;
+   m_cpu_min_freq = 0;
+
+   m_available_freq  = QString("Unknown");
+   m_available_governors = QString("Unknown");
+   m_cur_goverors  = QString("Unknown");
+
+   m_ipaddress = QString("Unknown");
+
+   m_temperature = 0;
+   m_cpu_load = 0;
+   m_cpu_0_load = 0;
+   m_cpu_1_load = 0;
+   m_mem_used = 0;
 
    // -------------------------------------------------------------------------------
-   file = fopen(CPU_INFO_PATH, "r");
+   if (GetSystemInformation() == 0)
+   {
+   }
+   else
+   {
+   }
+
+   // -------------------------------------------------------------------------------
+   if (GetSystemMemory() == 0)
+   {
+   }
+   else
+   {
+   }
+
+   // -------------------------------------------------------------------------------
+   GetSysfs((char*) KERNEL_CMD_LINE, m_kernel_cmd_line);
+
+   // -------------------------------------------------------------------------------
+   QString cur_freq;
+   GetSysfs((char*) CPU_CUR_FREQ, cur_freq);
+   m_cpu_cur_freq = cur_freq.toInt();
+
+   QString max_freq;
+   GetSysfs((char*) CPU_MAX_FREQ, max_freq);
+   m_cpu_max_freq = max_freq.toInt();
+
+   QString min_freq;
+   GetSysfs((char*) CPU_MIN_FREQ, min_freq);
+   m_cpu_min_freq = min_freq.toInt();
+
+   GetSysfs((char*) CPU_AVAILABLE_FREQ, m_available_freq);
+   GetSysfs((char*) CPU_AVAILABLE_GOVERNORS, m_available_governors);
+   GetSysfs((char*) CPU_CUR_GOVERNORS, m_cur_goverors);
+
+   // -------------------------------------------------------------------------------
+   QList<QHostAddress> list = QNetworkInterface::allAddresses();
+
+   for(int nIter=0; nIter<list.count(); nIter++)
+   {
+      if(!list[nIter].isLoopback())
+      {
+         if (list[nIter].protocol() == QAbstractSocket::IPv4Protocol)
+         {
+            m_ipaddress = list[nIter].toString();
+         }
+      }
+   }
+
+   // -------------------------------------------------------------------------------
+   qWarning(" CPU  : %d \n", m_cpu_num);
+   qWarning() << " ARCH : " + m_cpu_arch;
+   qWarning() << " REV  : " + m_cpu_rev;
+   qWarning() << " SERI : " + m_cpu_serial;
+
+   qWarning(" MEM  : %d kB\n", m_total_mem_kb);
+
+   qWarning() << " CMD  : " + m_kernel_cmd_line;
+
+   qWarning("FREQ  : %d (%d ~ %d) kHz\n", m_cpu_cur_freq, m_cpu_min_freq, m_cpu_max_freq);
+
+   qWarning() << "AVAIL FREQ  : " + m_available_freq;
+   qWarning() << "AVAIL GOVERNORS  : " + m_available_governors;
+   qWarning() << "CUR GOVERNORS  : " + m_cur_goverors;
+   qWarning() << "IP ADDRESS  : " + m_ipaddress;
+
+
+
+}
+
+
+// --------------------------------------------------------------------------
+//  Name : GetSysfs()
+//
+//
+// --------------------------------------------------------------------------
+int SystemInfo::GetSysfs(char* sysfs, QString& retString)
+{
+   QFile qfile;
+   FILE* file = NULL;
+
+   // -------------------------------------------------------------------------------
+   file = fopen(sysfs, "r");
+
    if (file != NULL)
    {
       if (qfile.open(file, QFile::ReadOnly | QFile::Text))
       {
-         QString ConfigText;
-         while (!qfile.atEnd())
-         {
-            ConfigText  =  qfile.readLine();
+         QByteArray array_cpuinfo;
+         array_cpuinfo = qfile.readAll();
 
-            if (ConfigText.contains(CPU_INFO_PROCESSOR))
-            {
-            }
+         // -------------------------------------------------------------------------------
+         // split line
+         QList<QByteArray> cpuinfo_byte_arrary = array_cpuinfo.split('\n');
+         QByteArray cpuinfo_byte_line;
+         QString cpuinfo_string_line;
+         QString args;
+         QString param;
 
-            if (ConfigText.contains(CPU_INFO_MODEL))
-            {
-            }
-         }
+         // get from list
+         cpuinfo_byte_line = cpuinfo_byte_arrary.at(0);
+         // byte to QString.
+         retString = QString(cpuinfo_byte_line);
+
+         // -------------------------------------------------------------------------------
          qfile.close();
       }
+      else
+      {
+         qWarning("cannot open file (%s) \n", sysfs);
+         return -1;
+      }
+      fclose(file);
    }
-   // -------------------------------------------------------------------------------
-   QString test_text;
-   test_text = "processor       : 0";
-
-   int index = test_text.indexOf(":");
-
-   if (test_text.contains(CPU_INFO_PROCESSOR))
+   else
    {
-      cpu_core_num++;
-   }
-   
-   if (test_text.contains(CPU_INFO_MODEL))
-   {
-      cpu_architecture_string = "";
+      qWarning("cannot open file (%s) \n", sysfs);
+      return -1;
    }
 
-
-   test_text = "model name      : ARMv7 Processor rev 5 (v7l)";
-   if (test_text.contains(CPU_INFO_PROCESSOR))
-   {
-      cpu_core_num++;
-   }
-   
-   if (test_text.contains(CPU_INFO_MODEL))
-   {
-      cpu_architecture_string = "";
-   }
-
-
-   test_text = "processor       : 1";
-   if (test_text.contains(CPU_INFO_PROCESSOR))
-   {
-      cpu_core_num++;
-   }
-   
-   if (test_text.contains(CPU_INFO_MODEL))
-   {
-      cpu_architecture_string = "";
-   }
-
-   // -------------------------------------------------------------------------------
-   m_processor_info = "unknown processor";
-
-
+   return 0;
 }
+
+
+// --------------------------------------------------------------------------
+//  Name : GetSystemInformation()
+//
+//
+// --------------------------------------------------------------------------
+int SystemInfo::GetSystemInformation()
+{
+   QFile qfile;
+   FILE*  file = NULL;
+
+   // -------------------------------------------------------------------------------
+   m_cpu_num = 0;
+   m_cpu_arch = QString("known architecture");
+   m_cpu_rev = QString("known");
+   m_cpu_serial = QString("known");
+
+   // -------------------------------------------------------------------------------
+   file = fopen(CPU_INFO_PATH, "r");
+
+   if (file != NULL)
+   {
+      if (qfile.open(file, QFile::ReadOnly | QFile::Text))
+      {
+         QByteArray array_cpuinfo;
+         array_cpuinfo = qfile.readAll();
+
+         // -------------------------------------------------------------------------------
+         // split line
+         QList<QByteArray> cpuinfo_byte_arrary = array_cpuinfo.split('\n');
+         QByteArray cpuinfo_byte_line;
+         QString cpuinfo_string_line;
+         QString args;
+         QString param;
+
+         for (int i = 0; i < cpuinfo_byte_arrary.count(); i++)
+         {
+            // get from list
+            cpuinfo_byte_line = cpuinfo_byte_arrary.at(i);
+            // byte to QString.
+            cpuinfo_string_line = QString(cpuinfo_byte_line);
+
+            if (cpuinfo_string_line.contains(CPU_INFO_PROCESSOR))
+            {
+               args = cpuinfo_string_line.left(cpuinfo_string_line.indexOf("\t") - 1);
+               param = cpuinfo_string_line.right(cpuinfo_string_line.length() - cpuinfo_string_line.indexOf(":") - 2);
+
+               m_cpu_num++;
+            }
+            else if (cpuinfo_string_line.contains(CPU_INFO_MODEL))
+            {
+               args = cpuinfo_string_line.left(cpuinfo_string_line.indexOf("\t") - 1);
+               param = cpuinfo_string_line.right(cpuinfo_string_line.length() - cpuinfo_string_line.indexOf(":") - 2);
+
+               m_cpu_arch = param;
+            }
+            else if (cpuinfo_string_line.contains(CPU_INFO_REVISION))
+            {
+               args = cpuinfo_string_line.left(cpuinfo_string_line.indexOf("\t") - 1);
+               param = cpuinfo_string_line.right(cpuinfo_string_line.length() - cpuinfo_string_line.indexOf(":") - 2);
+
+               m_cpu_rev = param;
+            }
+            else if (cpuinfo_string_line.contains(CPU_INFO_SERIAL))
+            {
+               args = cpuinfo_string_line.left(cpuinfo_string_line.indexOf("\t") - 1);
+               param = cpuinfo_string_line.right(cpuinfo_string_line.length() - cpuinfo_string_line.indexOf(":") - 2);
+
+               m_cpu_serial = param;
+            }
+         }
+
+         // -------------------------------------------------------------------------------
+         qfile.close();
+      }
+      else
+      {
+         qWarning("cannot open file (%s) \n", CPU_INFO_PATH);
+         return -1;
+      }
+      fclose(file);
+   }
+   else
+   {
+      qWarning("cannot open file (%s) \n", CPU_INFO_PATH);
+      return -1;
+   }
+   return 0;
+}
+
+// --------------------------------------------------------------------------
+//  Name : GetSystemMemory()
+//
+//
+// --------------------------------------------------------------------------
+int SystemInfo::GetSystemMemory()
+{
+   QFile qfile;
+   FILE*  file = NULL;
+
+   // -------------------------------------------------------------------------------
+   m_total_mem_kb = 0;
+
+   // -------------------------------------------------------------------------------
+   file = fopen(MEM_INFO_PATH, "r");
+
+   if (file != NULL)
+   {
+      if (qfile.open(file, QFile::ReadOnly | QFile::Text))
+      {
+         QByteArray array_cpuinfo;
+         array_cpuinfo = qfile.readAll();
+
+         // -------------------------------------------------------------------------------
+         // split line
+         QList<QByteArray> cpuinfo_byte_arrary = array_cpuinfo.split('\n');
+         QByteArray cpuinfo_byte_line;
+         QString cpuinfo_string_line;
+         uint mem_free = 0;
+         uint mem_available = 0;
+
+         for (int i = 0; i < cpuinfo_byte_arrary.count(); i++)
+         {
+            // get from list
+            cpuinfo_byte_line = cpuinfo_byte_arrary.at(i);
+            // byte to QString.
+            cpuinfo_string_line = QString(cpuinfo_byte_line);
+
+            QList<QString> meminfo_byte_arrary = cpuinfo_string_line.split(' ');
+
+//            qWarning() << meminfo_byte_arrary;
+
+            if (meminfo_byte_arrary.at(0) == MEM_TOTAL)
+            {
+               for (int j = 0; j < meminfo_byte_arrary.count(); j++)
+               {
+                  if ((meminfo_byte_arrary.at(j)).toInt() != 0)
+                  {
+                     m_total_mem_kb = (meminfo_byte_arrary.at(j)).toInt();
+                  }
+               }
+            }
+            else if (meminfo_byte_arrary.at(0) == MEM_FREE)
+            {
+               for (int j = 0; j < meminfo_byte_arrary.count(); j++)
+               {
+                  if ((meminfo_byte_arrary.at(j)).toInt() != 0)
+                  {
+                     mem_free = (meminfo_byte_arrary.at(j)).toInt();
+                  }
+               }
+            }
+            else if (meminfo_byte_arrary.at(0) == MEM_AVAILABLE)
+            {
+               for (int j = 0; j < meminfo_byte_arrary.count(); j++)
+               {
+                  if ((meminfo_byte_arrary.at(j)).toInt() != 0)
+                  {
+                     mem_available = (meminfo_byte_arrary.at(j)).toInt();
+                  }
+               }
+               m_mem_used = ((m_total_mem_kb - mem_available) * 100) / m_total_mem_kb;
+            }
+         }
+
+         // -------------------------------------------------------------------------------
+         qfile.close();
+      }
+      else
+      {
+         qWarning("cannot open file (%s) \n", MEM_INFO_PATH);
+         return -1;
+      }
+      fclose(file);
+   }
+   else
+   {
+      qWarning("cannot open file (%s) \n", MEM_INFO_PATH);
+      return -1;
+   }
+   return 0;
+}
+
+
+// --------------------------------------------------------------------------
+//  Name : GetCPULoad()
+//
+//
+// --------------------------------------------------------------------------
+int SystemInfo::GetCPULoad()
+{
+   QFile qfile;
+   FILE* file = NULL;
+
+   // -------------------------------------------------------------------------------
+   m_total_mem_kb = 0;
+
+   // -------------------------------------------------------------------------------
+   file = fopen(CPU_STAT_PATH, "r");
+
+   if (file != NULL)
+   {
+      if (qfile.open(file, QFile::ReadOnly | QFile::Text))
+      {
+         QByteArray array_cpuinfo;
+         array_cpuinfo = qfile.readAll();
+
+         // -------------------------------------------------------------------------------
+         // split line
+         QList<QByteArray> cpuinfo_byte_arrary = array_cpuinfo.split('\n');
+         QByteArray cpuinfo_byte_line;
+         QString cpuinfo_string_line;
+
+         for (int i = 0; i < cpuinfo_byte_arrary.count(); i++)
+         {
+            // get from list
+            cpuinfo_byte_line = cpuinfo_byte_arrary.at(i);
+            // byte to QString.
+            cpuinfo_string_line = QString(cpuinfo_byte_line);
+
+            QList<QString> cpuinfo_byte_arrary = cpuinfo_string_line.split(' ');
+            uint user_mode = 0;
+            uint nice_user_mode = 0;
+            uint system_mode = 0;
+            uint idle = 0;
+
+            if (cpuinfo_byte_arrary.at(0) == CPU_STAT_CPU)
+            {
+               user_mode = (cpuinfo_byte_arrary.at(2)).toInt();
+               nice_user_mode = (cpuinfo_byte_arrary.at(3)).toInt();
+               system_mode = (cpuinfo_byte_arrary.at(4)).toInt();
+               idle = (cpuinfo_byte_arrary.at(5)).toInt();
+
+               m_cpu_load = ((user_mode + nice_user_mode + system_mode) * 100) / (user_mode + nice_user_mode + system_mode + idle);
+//               qWarning("%d, %d, %d, %d : %d \n", user_mode, nice_user_mode, system_mode, idle, m_cpu_load);
+            }
+            else if (cpuinfo_byte_arrary.at(0) == CPU_STAT_CPU0)
+            {
+               user_mode = (cpuinfo_byte_arrary.at(1)).toInt();
+               nice_user_mode = (cpuinfo_byte_arrary.at(2)).toInt();
+               system_mode = (cpuinfo_byte_arrary.at(3)).toInt();
+               idle = (cpuinfo_byte_arrary.at(4)).toInt();
+
+               m_cpu_0_load = ((user_mode + nice_user_mode + system_mode) * 100) / (user_mode + nice_user_mode + system_mode + idle);
+//               qWarning("%d, %d, %d, %d : %d \n", user_mode, nice_user_mode, system_mode, idle, m_cpu_0_load);
+            }
+            else if (cpuinfo_byte_arrary.at(0) == CPU_STAT_CPU1)
+            {
+               user_mode = (cpuinfo_byte_arrary.at(1)).toInt();
+               nice_user_mode = (cpuinfo_byte_arrary.at(2)).toInt();
+               system_mode = (cpuinfo_byte_arrary.at(3)).toInt();
+               idle = (cpuinfo_byte_arrary.at(4)).toInt();
+
+               m_cpu_1_load = ((user_mode + nice_user_mode + system_mode) * 100) / (user_mode + nice_user_mode + system_mode + idle);
+//               qWarning("%d, %d, %d, %d : %d \n", user_mode, nice_user_mode, system_mode, idle, m_cpu_1_load);
+            }
+         }
+
+         // -------------------------------------------------------------------------------
+         qfile.close();
+      }
+      else
+      {
+         qWarning("cannot open file (%s) \n", CPU_STAT_PATH);
+         return -1;
+      }
+      fclose(file);
+   }
+   else
+   {
+      qWarning("cannot open file (%s) \n", CPU_STAT_PATH);
+      return -1;
+   }
+   return 0;
+}
+
 
 // --------------------------------------------------------------------------
 //  Name : getCpuInfo()
@@ -103,9 +496,205 @@ SystemInfo::SystemInfo(QObject *parent) : QObject(parent)
 // --------------------------------------------------------------------------
 QString SystemInfo::getCpuInfo()
 {
-   return m_processor_info;
+   QString cpuinfo;
+   cpuinfo.sprintf("CORE : %d", m_cpu_num);
+
+   return cpuinfo;
 }
 
+// --------------------------------------------------------------------------
+//  Name : getCpuArch()
+//
+//
+// --------------------------------------------------------------------------
+QString SystemInfo::getCpuArch()
+{
+   QString archinfo;
+   archinfo = "ARCH : " + m_cpu_arch;
+
+   qWarning() << archinfo;
+
+   return archinfo;
+}
+
+// --------------------------------------------------------------------------
+//  Name : getCpuRev()
+//
+//
+// --------------------------------------------------------------------------
+QString SystemInfo::getCpuRev()
+{
+   QString cpurevinfo;
+   cpurevinfo = "CPU REV. : " + m_cpu_rev;
+
+   return cpurevinfo;
+}
+
+// --------------------------------------------------------------------------
+//  Name : getCpuSerial()
+//
+//
+// --------------------------------------------------------------------------
+QString SystemInfo::getCpuSerial()
+{
+   QString cpuserinfo;
+   cpuserinfo = "CPU SER. : " + m_cpu_serial;
+
+   return cpuserinfo;
+}
+
+// --------------------------------------------------------------------------
+//  Name : getTotalMem()
+//
+//
+// --------------------------------------------------------------------------
+QString SystemInfo::getTotalMem()
+{
+   QString meminfo;
+   meminfo.sprintf("TOTAL MEM : %d kB", m_total_mem_kb);
+
+   return meminfo;
+}
+
+// --------------------------------------------------------------------------
+//  Name : getCpuFreq()
+//
+//
+// --------------------------------------------------------------------------
+QString SystemInfo::getCpuFreq()
+{
+   QString freqinfo;
+   freqinfo.sprintf("FREQ(MHz) : %d (%d ~ %d)", m_cpu_cur_freq / 1000, m_cpu_min_freq / 1000, m_cpu_max_freq / 1000);
+
+   return freqinfo;
+}
+
+// --------------------------------------------------------------------------
+//  Name : getAvailCpuFreq()
+//
+//
+// --------------------------------------------------------------------------
+QString SystemInfo::getAvailCpuFreq()
+{
+   QString availfreqinfo;
+   availfreqinfo = "AVIL. FREQ(kHz) : " + m_available_freq;
+
+   return availfreqinfo;
+}
+
+
+// --------------------------------------------------------------------------
+//  Name : getCpuGovernors()
+//
+//
+// --------------------------------------------------------------------------
+QString SystemInfo::getCpuGovernors()
+{
+   QString governorinfo;
+   governorinfo = "CPU Governor : " + m_cur_goverors;
+
+   return governorinfo;
+}
+
+// --------------------------------------------------------------------------
+//  Name : getCpuAvailGovernors()
+//
+//
+// --------------------------------------------------------------------------
+QString SystemInfo::getCpuAvailGovernors()
+{
+   QString availgovernorinfo;
+   availgovernorinfo = "AVAIL. Gove. : " + m_available_governors;
+
+   return availgovernorinfo;
+}
+
+// --------------------------------------------------------------------------
+//  Name : getIPaddress()
+//
+//
+// --------------------------------------------------------------------------
+QString SystemInfo::getIPaddress()
+{
+   QString ipinfo;
+   ipinfo = "IPv4 ADDR. : " + m_ipaddress;
+
+   return ipinfo;
+}
+
+// --------------------------------------------------------------------------
+//  Name : getTemperatureValue()
+//
+//
+// --------------------------------------------------------------------------
+uint SystemInfo::getTemperatureValue()
+{
+   QString cur_tem;
+   if (GetSysfs((char*) CPU_THERMAL_TEMP, cur_tem) == 0)
+   {
+      m_temperature = cur_tem.toInt() / 1000;
+   }
+   else
+   {
+      m_temperature = (QRandomGenerator::global()->generate() % 100);
+   }
+   qWarning("TEMP : %d \n", m_temperature);
+   return m_temperature;
+}
+
+// --------------------------------------------------------------------------
+//  Name : getCpuLoadValue()
+//
+//
+// --------------------------------------------------------------------------
+uint SystemInfo::getCpuLoadValue()
+{
+   if (GetCPULoad() != 0)
+   {
+      m_cpu_load = (QRandomGenerator::global()->generate() % 100);
+      m_cpu_0_load = (QRandomGenerator::global()->generate() % 100);
+      m_cpu_1_load = (QRandomGenerator::global()->generate() % 100);
+   }
+   qWarning("LOAD : %d %, %d %, %d % \n", m_cpu_load, m_cpu_0_load, m_cpu_1_load);
+
+   return m_cpu_load;
+}
+
+// --------------------------------------------------------------------------
+//  Name : getCpu_0_LoadValue()
+//
+//
+// --------------------------------------------------------------------------
+uint SystemInfo::getCpu_0_LoadValue()
+{
+   return m_cpu_0_load;
+}
+
+// --------------------------------------------------------------------------
+//  Name : getCpu_1_LoadValue()
+//
+//
+// --------------------------------------------------------------------------
+uint SystemInfo::getCpu_1_LoadValue()
+{
+   return m_cpu_1_load;
+}
+
+
+// --------------------------------------------------------------------------
+//  Name : getMemUsedValue()
+//
+//
+// --------------------------------------------------------------------------
+uint SystemInfo::getMemUsedValue()
+{
+   if (GetSystemMemory() != 0)
+   {
+      m_mem_used = (QRandomGenerator::global()->generate() % 100);
+   }
+   qWarning("MEM : %d % \n", m_mem_used);
+   return m_mem_used;
+}
 
 
 
