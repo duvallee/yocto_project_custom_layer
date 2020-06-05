@@ -10,7 +10,9 @@ LICENSE = "Proprietary"
 include recipes-st/images/st-image.inc
 
 # ------------------------------------------------------
-inherit core-image distro_features_check populate_sdk_qt5
+inherit core-image distro_features_check
+
+# populate_sdk_qt5
 
 # ------------------------------------------------------
 # let's make sure we have a good image..
@@ -106,9 +108,16 @@ CORE_IMAGE_EXTRA_INSTALL += "               \
     ttf-dejavu-common                       \
     "
 
+# ------------------------------------------------------
 CORE_IMAGE_EXTRA_INSTALL += " ldd "
 CORE_IMAGE_EXTRA_INSTALL += " openstlinux-qt-eglfs "
 
+# ------------------------------------------------------
+CORE_IMAGE_EXTRA_INSTALL += " stress "
+
+# ------------------------------------------------------
+IMAGE_INSTALL_append = " tzdata"
+DEFAULT_TIMEZONE = "Asia/Seoul"
 
 # ------------------------------------------------------
 # add sample program
