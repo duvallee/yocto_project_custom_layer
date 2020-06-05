@@ -34,6 +34,7 @@
 
 // --------------------------------------------------------------------------
 #define KERNEL_VERSION                                   "/proc/version"
+#define OS_VERSION                                       "/etc/os-release"
 
 // --------------------------------------------------------------------------
 #define KERNEL_CMD_LINE                                  "/proc/cmdline"
@@ -116,8 +117,12 @@ SystemInfo::SystemInfo(QObject *parent) : QObject(parent)
 
    // -------------------------------------------------------------------------------
    GetSysfs((char*) KERNEL_CMD_LINE, m_kernel_cmd_line);
+
    // -------------------------------------------------------------------------------
    GetSysfs((char*) KERNEL_VERSION, m_kernel_version);
+
+   // -------------------------------------------------------------------------------
+   GetFile((char*) OS_VERSION, m_os_version);
 
    // -------------------------------------------------------------------------------
    QString cur_freq;
@@ -167,8 +172,8 @@ SystemInfo::SystemInfo(QObject *parent) : QObject(parent)
    qWarning() << "CUR GOVERNORS  : " + m_cur_goverors;
    qWarning() << "IP ADDRESS  : " + m_ipaddress;
 
-
-
+   qWarning() << m_kernel_version;
+   qWarning() << m_os_version;
 }
 
 
@@ -183,6 +188,7 @@ int SystemInfo::GetSysfs(char* sysfs, QString& retString)
    FILE* file = NULL;
 
    // -------------------------------------------------------------------------------
+   retString = QString("");
    file = fopen(sysfs, "r");
 
    if (file != NULL)
@@ -208,6 +214,7 @@ int SystemInfo::GetSysfs(char* sysfs, QString& retString)
       }
       else
       {
+         fclose(file);
          qWarning("cannot open file (%s) \n", sysfs);
          return -1;
       }
@@ -219,6 +226,45 @@ int SystemInfo::GetSysfs(char* sysfs, QString& retString)
       return -1;
    }
 
+   return 0;
+}
+
+
+// --------------------------------------------------------------------------
+//  Name : GetFile()
+//
+//
+// --------------------------------------------------------------------------
+int SystemInfo::GetFile(char* sysfs, QString& retString)
+{
+   QFile qfile;
+   FILE* file = NULL;
+
+   // -------------------------------------------------------------------------------
+   retString = QString("");
+   file = fopen(sysfs, "r");
+
+   if (file != NULL)
+   {
+      if (qfile.open(file, QFile::ReadOnly | QFile::Text))
+      {
+         // -------------------------------------------------------------------------------
+         retString = qfile.readAll();
+         qfile.close();
+      }
+      else
+      {
+         fclose(file);
+         qWarning("cannot open file (%s) \n", sysfs);
+         return -1;
+      }
+      fclose(file);
+   }
+   else
+   {
+      qWarning("cannot open file (%s) \n", sysfs);
+      return -1;
+   }
    return 0;
 }
 
