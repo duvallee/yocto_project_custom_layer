@@ -43,7 +43,7 @@ Page
                text: "Memory"
 
                font.bold: true;
-               font.pixelSize: 36
+               font.pixelSize: g_title_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -66,7 +66,7 @@ Page
 
                text: "Total Memory : " + (systeminfo.getTotalMem / 1000).toString() + " MB"
 
-               font.pixelSize: 24
+               font.pixelSize: g_content_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -82,7 +82,7 @@ Page
                id : free_memory
                color: "gainsboro"
 
-               font.pixelSize: 24
+               font.pixelSize: g_content_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -100,7 +100,7 @@ Page
 
                color: "gainsboro"
 
-               font.pixelSize: 24
+               font.pixelSize: g_content_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -124,7 +124,7 @@ Page
                text: "Temperature"
 
                font.bold: true;
-               font.pixelSize: 36
+               font.pixelSize: g_title_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -147,7 +147,7 @@ Page
 
                color: "gainsboro"
 
-               font.pixelSize: 24
+               font.pixelSize: g_content_font_size
                style: Text.Raised;
                styleColor: "black"
             }

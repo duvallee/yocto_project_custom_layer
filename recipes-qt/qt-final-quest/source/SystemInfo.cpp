@@ -91,9 +91,9 @@ SystemInfo::SystemInfo(QObject *parent) : QObject(parent)
    m_cpu_1_load = 0;
    m_mem_used = 0;
 
-   m_kernel_cmd_line = QString("root=/dev/mmcblk0p6 rootwait rw console=ttySTM0,115200");
-   m_kernel_version = QString("Linux version 4.19.94 (oe-user@oe-host) (gcc version 8.2.0 (GCC)) #1 SMP PREEMPT Thu Jan 9 18:19:10 KST 2020");
-   m_os_version = QString("ID=\"openstlinux-eglfs\"\nNAME=\"ST OpenSTLinux - EGLfs - (A Yocto Project Based Distro)\"\nVERSION=\"2.6-snapshot-20200602 (thud)\"\nVERSION_ID=\"2.6-snapshot-20200602\"\nPRETTY_NAME=\"ST OpenSTLinux - EGLfs - (A Yocto Project Based Distro) 2.6-snapshot-20200602 (thud)\"");
+   m_kernel_cmd_line = QString("Unknown");
+   m_kernel_version = QString("Unknown");
+   m_os_version = QString("Unknown");
 
    QString env_str = getenv("PATH");
    qWarning() << env_str;
@@ -645,9 +645,9 @@ uint SystemInfo::getTemperatureValue()
    }
    else
    {
-      m_temperature = (QRandomGenerator::global()->generate() % 100);
+//      m_temperature = (QRandomGenerator::global()->generate() % 100);
    }
-   qWarning("TEMP : %d \n", m_temperature);
+
    return m_temperature;
 }
 
@@ -660,11 +660,10 @@ uint SystemInfo::getCpuLoadValue()
 {
    if (GetCPULoad() != 0)
    {
-      m_cpu_load = (QRandomGenerator::global()->generate() % 100);
-      m_cpu_0_load = (QRandomGenerator::global()->generate() % 100);
-      m_cpu_1_load = (QRandomGenerator::global()->generate() % 100);
+//      m_cpu_load = (QRandomGenerator::global()->generate() % 100);
+//      m_cpu_0_load = (QRandomGenerator::global()->generate() % 100);
+//      m_cpu_1_load = (QRandomGenerator::global()->generate() % 100);
    }
-//   qWarning("LOAD : %d %, %d %, %d % \n", m_cpu_load, m_cpu_0_load, m_cpu_1_load);
 
    return m_cpu_load;
 }
@@ -699,9 +698,8 @@ uint SystemInfo::getMemUsedValue()
 {
    if (GetSystemMemory() != 0)
    {
-      m_mem_used = (QRandomGenerator::global()->generate() % 100);
+//      m_mem_used = (QRandomGenerator::global()->generate() % 100);
    }
-//   qWarning("MEM : %d % \n", m_mem_used);
    return m_mem_used;
 }
 

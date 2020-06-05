@@ -24,31 +24,22 @@ Item
    property int g_system_layout_height : 400
    property int g_system_layout_margin : 8
 
-   // for text
-   // title
-   property int g_system_title_font_size : 18
-   property string g_system_title_font_color : "lavender"
-   property int g_system_title_left_margin : 10
-
-   // contents
-   property int g_system_content_font_size : 14
-   property string g_system_content_font_color : "hotpink"
-   property int g_system_content_left_margin : 16
-
-   // line
-   property int g_system_text_alignmet : 34
-
    // for chart
    property int g_chart_layout_width : 480
    property int g_chart_layout_height : 400
 
 
    // ------------------------------------------------------------
+   // for text
+   property int g_title_font_size : 34
+   property int g_content_font_size : 22
+
+   // ------------------------------------------------------------
    property int time_count : 0
    property int chart_index : 0
 
-//   property int shift_count : 30
-   property int shift_count : 6
+   property int shift_count : 30
+//   property int shift_count : 10
 
    // ------------------------------------------------------------
    width: g_screen_width
@@ -139,10 +130,10 @@ Item
 
       // ---------------------------------------------------------
       // margins
-      margins.top: 2
-      margins.left: 2
-      margins.right: 2
-      margins.bottom: 4
+      margins.top: 0
+      margins.left: 0
+      margins.right: 0
+      margins.bottom: 0
 
       // ---------------------------------------------------------
 //      legend.visible: false
@@ -167,8 +158,8 @@ Item
          tickCount : shift_count
 
          // ------------------------------------------------------
-         titleFont.pointSize: 7
-         labelsFont.pointSize: 7
+         titleFont.pointSize: 3
+         labelsFont.pointSize: 3
       }
 
       // ---------------------------------------------------------
@@ -179,8 +170,8 @@ Item
          max : 100
 
          // ------------------------------------------------------
-         titleFont.pointSize : 7
-         labelsFont.pointSize : 7
+         titleFont.pointSize : 3
+         labelsFont.pointSize : 3
 
          titleText : "&deg;C  %"
       }
@@ -193,11 +184,11 @@ Item
          axisY : value_valueAxisY
 
          // ------------------------------------------------------
-         pointLabelsFont.pointSize : 7
+         pointLabelsFont.pointSize : 3
 
          color : "yellow"
 
-         name : "cpu"
+         name : "c"
       }
 
       // ---------------------------------------------------------
@@ -208,11 +199,11 @@ Item
          axisY : value_valueAxisY
 
          // ------------------------------------------------------
-         pointLabelsFont.pointSize : 7
+         pointLabelsFont.pointSize : 3
 
          color : "greenyellow"
 
-         name : "cpu 0"
+         name : "c0"
       }
 
       // ---------------------------------------------------------
@@ -223,11 +214,11 @@ Item
          axisY : value_valueAxisY
 
          // ------------------------------------------------------
-         pointLabelsFont.pointSize : 7
+         pointLabelsFont.pointSize : 3
 
          color : "gold"
          
-         name : "cpu 1"
+         name : "c1"
       }
 
       // ---------------------------------------------------------
@@ -238,11 +229,11 @@ Item
          axisY : value_valueAxisY
 
          // ------------------------------------------------------
-         pointLabelsFont.pointSize : 7
+         pointLabelsFont.pointSize : 3
 
          color : "white"
          
-         name : "mem used"
+         name : "mem"
       }
 
       // ---------------------------------------------------------
@@ -253,7 +244,7 @@ Item
          axisY : value_valueAxisY
 
          // ------------------------------------------------------
-         pointLabelsFont.pointSize : 7
+         pointLabelsFont.pointSize : 3
 
          color : "magenta"
          

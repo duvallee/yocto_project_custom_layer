@@ -43,7 +43,7 @@ Page
                text: "CPU Frequency"
 
                font.bold: true;
-               font.pixelSize: 36
+               font.pixelSize: g_title_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -64,9 +64,9 @@ Page
             {
                color: "gainsboro"
 
-               text: "Available CPU Frequency : "
+               text: "Available CPU Frequency(KHz) : "
 
-               font.pixelSize: 24
+               font.pixelSize: g_content_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -83,7 +83,7 @@ Page
 
                text: systeminfo.getAvailCpuFreq
 
-               font.pixelSize: 24
+               font.pixelSize: g_content_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -101,7 +101,7 @@ Page
 
                text: "MIN : " + (systeminfo.getMinFreq / 1000).toString() + " MHz ~ MAX : " + (systeminfo.getMaxFreq / 1000).toString() + " MHz"
 
-               font.pixelSize: 24
+               font.pixelSize: g_content_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -118,7 +118,7 @@ Page
 
                text: "Current CPU Frequency : " + (systeminfo.getCpuFreq.toString() / 1000).toString() + " MHz"
 
-               font.pixelSize: 24
+               font.pixelSize: g_content_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -142,7 +142,7 @@ Page
 
                text: "Available Governors : "
 
-               font.pixelSize: 24
+               font.pixelSize: g_content_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -159,7 +159,7 @@ Page
 
                text: systeminfo.getCpuAvailGovernors
 
-               font.pixelSize: 24
+               font.pixelSize: g_content_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -177,7 +177,7 @@ Page
 
                text: "Current Governor : " + systeminfo.getCpuGovernors
 
-               font.pixelSize: 24
+               font.pixelSize: g_content_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -201,7 +201,7 @@ Page
                text: "CPU LOAD"
 
                font.bold: true;
-               font.pixelSize: 36
+               font.pixelSize: g_title_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -226,7 +226,7 @@ Page
 
                text: "Current Governor : " + systeminfo.getCpuGovernors
 
-               font.pixelSize: 24
+               font.pixelSize: g_content_font_size
                style: Text.Raised;
                styleColor: "black"
             }

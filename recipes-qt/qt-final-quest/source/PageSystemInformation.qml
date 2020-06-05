@@ -43,7 +43,7 @@ Page
                text: "STM32MP157C-DK2"
 
                font.bold: true;
-               font.pixelSize: 36
+               font.pixelSize: g_title_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -66,7 +66,7 @@ Page
 
                text: "Core Num : " + (systeminfo.getCpuNum).toString()
 
-               font.pixelSize: 24
+               font.pixelSize: g_content_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -83,7 +83,7 @@ Page
 
                text: "Archtecture : " + systeminfo.getCpuArch
 
-               font.pixelSize: 24
+               font.pixelSize: g_content_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -100,7 +100,7 @@ Page
 
                text: "Core Rev : " + systeminfo.getCpuRev
 
-               font.pixelSize: 24
+               font.pixelSize: g_content_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -117,7 +117,7 @@ Page
 
                text: "Core Serial : " + systeminfo.getCpuSerial
 
-               font.pixelSize: 24
+               font.pixelSize: g_content_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -140,7 +140,7 @@ Page
                text: "NETWORK"
 
                font.bold: true;
-               font.pixelSize: 36
+               font.pixelSize: g_title_font_size
                style: Text.Raised;
                styleColor: "black"
             }
@@ -157,7 +157,7 @@ Page
 
                text: "IP4v ADDR : " + systeminfo.getIPaddress
 
-               font.pixelSize: 24
+               font.pixelSize: g_content_font_size
                style: Text.Raised;
                styleColor: "black"
             }

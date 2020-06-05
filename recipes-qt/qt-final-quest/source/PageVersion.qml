@@ -30,7 +30,7 @@ Page
       text: "Version"
 
       font.bold: true;
-      font.pixelSize: 36
+      font.pixelSize: g_title_font_size
       style: Text.Raised;
       styleColor: "black"
    }
@@ -50,7 +50,7 @@ Page
       text: "Kernel Parameter"
 
       font.bold: true;
-      font.pixelSize: 20
+      font.pixelSize: g_content_font_size
       style: Text.Raised;
       styleColor: "black"
    }
@@ -89,7 +89,7 @@ Page
       text: "Kernel Version"
 
       font.bold: true;
-      font.pixelSize: 20
+      font.pixelSize: g_content_font_size
       style: Text.Raised;
       styleColor: "black"
    }
@@ -127,7 +127,7 @@ Page
       text: "OS Version"
 
       font.bold: true;
-      font.pixelSize: 20
+      font.pixelSize: g_content_font_size
       style: Text.Raised;
       styleColor: "black"
    }
