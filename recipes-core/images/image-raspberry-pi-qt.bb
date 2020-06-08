@@ -18,9 +18,42 @@ DISTRO_FEATURES_BACKFILL_CONSIDERED = "sysvinit"
 VIRTUAL-RUNTIME_initscripts = ""
 
 # ============================================================
+QT_BASE = " \
+    qtbase \
+    qtbase-dev \
+    qtbase-mkspecs \
+    qtbase-plugins \
+    qtbase-tools \
+    "
+
+QT_PKGS = " \
+    qt3d \
+    qt3d-dev \
+    qt3d-mkspecs \
+    qtcharts \
+    qtcharts-dev \
+    qtcharts-mkspecs \
+    qtconnectivity-dev \
+    qtconnectivity-mkspecs \
+    qtquickcontrols2 \
+    qtquickcontrols2-dev \
+    qtquickcontrols2-mkspecs \
+    qtdeclarative \
+    qtdeclarative-dev \
+    qtdeclarative-mkspecs \
+    qtgraphicaleffects \
+    qtgraphicaleffects-dev \
+    "
+
+
+# ============================================================
 # add openssh & sudo package
 IMAGE_INSTALL_append += "openssh sudo "
 
+IMAGE_INSTALL_append += " \
+    ${QT_BASE} \
+    ${QT_PKGS} \
+"
 
 
 
