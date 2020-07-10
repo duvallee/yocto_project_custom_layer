@@ -1,0 +1,6 @@
+Available images for meta-custom layers are:
+
+  -  images:
+      image-stm32mp1-rc      -  custom image 
+
+
