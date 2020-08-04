@@ -53,6 +53,12 @@ do_configure_prepend() {
    bbplain "KERNEL_CONFIG_FRAGMENTS : ${KERNEL_CONFIG_FRAGMENTS}"
    bbplain " --------------------------------------------------------------- "
 
+   # -------------------------------------------------------------------
+   install -m 0644 ${S}/arch/arm/configs/stm32mp1-rc.config ${B}/.config
+   oe_runmake -C ${S} O=${B} CC="${KERNEL_CC}" LD="${KERNEL_LD}" oldconfig
+   exit 0
+   # -------------------------------------------------------------------
+
     if [ ! -z ${KERNEL_DEFCONFIG} ];
     then
         bbnote "Kernel customized: configuration of linux STM by using DEFCONFIG: ${KERNEL_DEFCONFIG}"
