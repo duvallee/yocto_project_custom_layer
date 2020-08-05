@@ -1,0 +1,11 @@
+
+[Match]
+Name=wlp1s0u*
+
+[Network]
+DHCP=yes
+
+[DHCP]
+RouteMetric=20
+
+
