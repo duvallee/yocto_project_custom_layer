@@ -26,4 +26,11 @@ do_deploy_append() {
         echo "" >> ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
         echo "init_uart_baud=${BAUDRATE_UART}" >> ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
     fi
+
+   sed -i '/#dtparam=i2c_arm=/ c\dtparam=i2c_arm=on' ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
+   sed -i '/#dtparam=i2c_vc=/ c\dtparam=i2c_vc=on' ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
+   sed -i '/#start_x=/ c\start_x=1' ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
+   sed -i '/#gpu_mem=/ c\gpu_mem=128' ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
+   sed -i '/#disable_overscan=/ c\disable_overscan=1' ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
+
 }
