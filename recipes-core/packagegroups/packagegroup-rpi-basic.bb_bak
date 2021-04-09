@@ -1,0 +1,15 @@
+#
+#
+#
+# -------------------------------------------------------------------------------
+SUMMARY = "basic package group for raspberry-pi"
+
+inherit packagegroup
+
+PACKAGES = "openssh sudo "
+PACKAGES += "tzdata "
+
+RDEPENDS_packagegroup-rpi-basic = " "
+
+
+

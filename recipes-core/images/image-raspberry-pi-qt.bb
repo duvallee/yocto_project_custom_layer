@@ -11,9 +11,11 @@ inherit core-image
 
 # ===============================================================
 IMAGE_INSTALL += " userland"
-# IMAGE_INSTALL += " linux-firmware-rpidistro"
-# IMAGE_INSTALL += " vc-graphics"
-# IMAGE_INSTALL += " weston-init wayland weston"
+IMAGE_INSTALL += " wayland"
+IMAGE_INSTALL += " kernel-modules"
+
+IMAGE_INSTALL += " qt5-profile"
+IMAGE_INSTALL += " profile-env"
 
 # ===============================================================
 IMAGE_INSTALL += " openssh sudo "
