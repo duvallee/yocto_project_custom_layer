@@ -2,7 +2,10 @@
 
 # the other option is eglfs but it is currently not working
 # with the 5.4 kernel
-export QT_QPA_PLATFORM=linuxfb
+# export QT_QPA_PLATFORM=linuxfb
+
+export QT_QPA_PLATFORM="eglfs"
+export QT_QPA_EGLFS_ALWAYS_SET_MODE="1"
 
 # physical width and height units are mm
 

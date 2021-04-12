@@ -37,7 +37,8 @@ SDIMG_KERNELIMAGE_raspberrypi3-64 ?= "kernel8.img"
 BOOTDD_VOLUME_ID ?= "${MACHINE}"
 
 # Boot partition size [in KiB] (will be rounded up to IMAGE_ROOTFS_ALIGNMENT)
-BOOT_SPACE ?= "40960"
+# BOOT_SPACE ?= "40960"
+BOOT_SPACE ?= "81920"
 
 # Set alignment to 4MB [in KiB]
 IMAGE_ROOTFS_ALIGNMENT = "4096"
