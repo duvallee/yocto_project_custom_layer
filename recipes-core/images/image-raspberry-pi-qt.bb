@@ -18,13 +18,23 @@ IMAGE_INSTALL += " qt5-profile"
 IMAGE_INSTALL += " profile-env"
 
 # ===============================================================
-IMAGE_INSTALL += " ${@bb.utils.contains('MACHINE', 'raspberrypi4-64', 'opencv', '', d)}"
+# for opencv
+# -D ENABLE_NEON=OFF in 32-bits
+IMAGE_INSTALL += " make cmake"
+# for sys/videoio.h not found
+IMAGE_INSTALL += " libv4l-dev v4l-utils"
+#
+IMAGE_INSTALL_append += " libjpeg-turbo tiff libpng"
+#
+IMAGE_INSTALL_append += " libstdc++"
+#
+# IMAGE_INSTALL += " ${@bb.utils.contains('MACHINE', 'raspberrypi4-64', 'opencv', 'opencv-binary-32bit', d)}"
+IMAGE_INSTALL_append += " opencv"
 
 # ===============================================================
 IMAGE_INSTALL += " openssh sudo "
 
 IMAGE_INSTALL += " tzdata"
-IMAGE_INSTALL += " make cmake"
 
 # for libboost-dev
 IMAGE_INSTALL += " boost"
