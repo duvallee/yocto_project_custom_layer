@@ -18,6 +18,9 @@ IMAGE_INSTALL += " qt5-profile"
 IMAGE_INSTALL += " profile-env"
 
 # ===============================================================
+IMAGE_INSTALL += " ${@bb.utils.contains('MACHINE', 'raspberrypi4-64', 'opencv', '', d)}"
+
+# ===============================================================
 IMAGE_INSTALL += " openssh sudo "
 
 IMAGE_INSTALL += " tzdata"
