@@ -10,36 +10,37 @@ IMAGE_INSTALL = "packagegroup-core-boot ${CORE_IMAGE_EXTRA_INSTALL}"
 inherit core-image
 
 # ===============================================================
-IMAGE_INSTALL += "userland"
-IMAGE_INSTALL += "wayland"
-IMAGE_INSTALL += "kernel-modules"
+IMAGE_INSTALL_append = " userland"
+IMAGE_INSTALL_append = " wayland"
+IMAGE_INSTALL_append = " kernel-modules"
 
-IMAGE_INSTALL += "qt5-profile"
-IMAGE_INSTALL += "profile-env"
+IMAGE_INSTALL_append = " qt5-profile"
+IMAGE_INSTALL_append = " profile-env"
 
 # ===============================================================
 # for opencv
 # -D ENABLE_NEON=OFF in 32-bits
-IMAGE_INSTALL += "make cmake"
+IMAGE_INSTALL_append = " make cmake"
 # for sys/videoio.h not found
-IMAGE_INSTALL += "libv4l-dev v4l-utils"
+IMAGE_INSTALL_append = " libv4l-dev v4l-utils"
 #
-IMAGE_INSTALL_append += "libjpeg-turbo tiff libpng"
+IMAGE_INSTALL_append = " libjpeg-turbo tiff libpng"
 #
-IMAGE_INSTALL_append += "libstdc++"
+IMAGE_INSTALL_append = " libstdc++"
 
 # IMAGE_INSTALL += " ${@bb.utils.contains('MACHINE', 'raspberrypi4-64', 'opencv', 'opencv-binary-32bit', d)}"
-IMAGE_INSTALL_append += "opencv"
+IMAGE_INSTALL_append = " opencv"
 
 # ===============================================================
 # for OpenMP
 # in buildtools-extended-tarball
 # no longer neceesary omp.h file in c source.
 # add -fopenmp to CFLAGS in Makefile or option of gcc
-IMAGE_INSTALL_append += "libgomp libgomp-dev libgomp-staticdev"
+IMAGE_INSTALL_append = " libgomp libgomp-dev libgomp-staticdev"
 
 # ===============================================================
-# IMAGE_INSTALL_append += "tensorflow-lite"
+IMAGE_INSTALL_append = " flatbuffers"
+IMAGE_INSTALL_append = " tensorflow-lite"
 
 # ===============================================================
 IMAGE_INSTALL += "openssh sudo"
