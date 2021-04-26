@@ -36,7 +36,7 @@ IMAGE_INSTALL_append += "opencv"
 # in buildtools-extended-tarball
 # no longer neceesary omp.h file in c source.
 # add -fopenmp to CFLAGS in Makefile or option of gcc
-IMAGE_INSTALL_append += "libgomp-dev"
+IMAGE_INSTALL_append += "libgomp libgomp-dev libgomp-staticdev"
 
 # ===============================================================
 # IMAGE_INSTALL_append += "tensorflow-lite"
