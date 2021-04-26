@@ -10,46 +10,56 @@ IMAGE_INSTALL = "packagegroup-core-boot ${CORE_IMAGE_EXTRA_INSTALL}"
 inherit core-image
 
 # ===============================================================
-IMAGE_INSTALL += " userland"
-IMAGE_INSTALL += " wayland"
-IMAGE_INSTALL += " kernel-modules"
+IMAGE_INSTALL += "userland"
+IMAGE_INSTALL += "wayland"
+IMAGE_INSTALL += "kernel-modules"
 
-IMAGE_INSTALL += " qt5-profile"
-IMAGE_INSTALL += " profile-env"
+IMAGE_INSTALL += "qt5-profile"
+IMAGE_INSTALL += "profile-env"
 
 # ===============================================================
 # for opencv
 # -D ENABLE_NEON=OFF in 32-bits
-IMAGE_INSTALL += " make cmake"
+IMAGE_INSTALL += "make cmake"
 # for sys/videoio.h not found
-IMAGE_INSTALL += " libv4l-dev v4l-utils"
+IMAGE_INSTALL += "libv4l-dev v4l-utils"
 #
-IMAGE_INSTALL_append += " libjpeg-turbo tiff libpng"
+IMAGE_INSTALL_append += "libjpeg-turbo tiff libpng"
 #
-IMAGE_INSTALL_append += " libstdc++"
-#
+IMAGE_INSTALL_append += "libstdc++"
+
 # IMAGE_INSTALL += " ${@bb.utils.contains('MACHINE', 'raspberrypi4-64', 'opencv', 'opencv-binary-32bit', d)}"
-IMAGE_INSTALL_append += " opencv"
+IMAGE_INSTALL_append += "opencv"
 
 # ===============================================================
-IMAGE_INSTALL += " openssh sudo "
+# for OpenMP
+# in buildtools-extended-tarball
+# no longer neceesary omp.h file in c source.
+# add -fopenmp to CFLAGS in Makefile or option of gcc
+IMAGE_INSTALL_append += "libgomp-dev"
 
-IMAGE_INSTALL += " tzdata"
+# ===============================================================
+# IMAGE_INSTALL_append += "tensorflow-lite"
+
+# ===============================================================
+IMAGE_INSTALL += "openssh sudo"
+
+IMAGE_INSTALL += "tzdata"
 
 # for libboost-dev
-IMAGE_INSTALL += " boost"
+IMAGE_INSTALL += "boost"
 # for libgnutls28-dev
-IMAGE_INSTALL += " gnutls"
-IMAGE_INSTALL += " openssl"
+IMAGE_INSTALL += "gnutls"
+IMAGE_INSTALL += "openssl"
 # for libtiff5-dev
-IMAGE_INSTALL += " tiff"
+IMAGE_INSTALL += "tiff"
 
 # IMAGE_INSTALL += " meson"
 
-IMAGE_INSTALL += " python3"
-IMAGE_INSTALL += " python3-numpy"
-IMAGE_INSTALL += " python3-pyyaml"
-IMAGE_INSTALL += " python3-ply"
+IMAGE_INSTALL += "python3"
+IMAGE_INSTALL += "python3-numpy"
+IMAGE_INSTALL += "python3-pyyaml"
+IMAGE_INSTALL += "python3-ply"
 
 # ===============================================================
 IMAGE_INSTALL += " \ 
@@ -101,11 +111,11 @@ IMAGE_INSTALL += " \
    \
    "
 
-IMAGE_INSTALL += " qt-example "
+IMAGE_INSTALL += "qt-example"
 
 # ===============================================================
 #
-# IMAGE_INSTALL += " libgles2 "
+# IMAGE_INSTALL += "libgles2"
 
 # ===============================================================
 DEFAULT_TIMEZONE = "Asia/Seoul"
