@@ -40,7 +40,7 @@ IMAGE_INSTALL_append = " libgomp libgomp-dev libgomp-staticdev"
 
 # ===============================================================
 IMAGE_INSTALL_append = " flatbuffers"
-IMAGE_INSTALL_append = " tensorflow-lite"
+IMAGE_INSTALL_append = " tensorflow-lite tensorflow-lite-staticdev"
 
 # ===============================================================
 IMAGE_INSTALL += "openssh sudo"
