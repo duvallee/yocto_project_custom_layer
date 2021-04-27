@@ -39,8 +39,13 @@ IMAGE_INSTALL_append = " opencv"
 IMAGE_INSTALL_append = " libgomp libgomp-dev libgomp-staticdev"
 
 # ===============================================================
+# for tensorflow-lite
 IMAGE_INSTALL_append = " flatbuffers"
 IMAGE_INSTALL_append = " tensorflow-lite tensorflow-lite-staticdev"
+
+# ===============================================================
+# for alibaba-mnn 
+# IMAGE_INSTALL_append = " alibaba-mnn"
 
 # ===============================================================
 IMAGE_INSTALL += "openssh sudo"
@@ -112,11 +117,16 @@ IMAGE_INSTALL += " \
    \
    "
 
+# ===============================================================
 IMAGE_INSTALL += "qt-example"
 
 # ===============================================================
 #
 # IMAGE_INSTALL += "libgles2"
+
+# ===============================================================
+# for SDK
+TOOLCHAIN_HOST_TASK_append = " nativesdk-flatbuffers-compiler"
 
 # ===============================================================
 DEFAULT_TIMEZONE = "Asia/Seoul"
