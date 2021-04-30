@@ -42,8 +42,10 @@ inherit cmake
 
 # --------------------------------------------------------
 PACKAGES_${PN} += "${libdir}/* ${includedir}/*"
-PACKAGES_${PN}-dev += "${libdir}/* ${includedir}/*"
+PACKAGES_${PN}-staticdev += "${libdir}/* ${includedir}/*"
 
 FILES_${PN} += "${libdir}/* ${includedir}/*"
+
+ALLOW_EMPTY_${PN} = "1"
 
 
