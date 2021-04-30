@@ -45,7 +45,11 @@ IMAGE_INSTALL_append = " tensorflow-lite tensorflow-lite-staticdev"
 
 # ===============================================================
 # for alibaba-mnn 
-# IMAGE_INSTALL_append = " alibaba-mnn"
+IMAGE_INSTALL_append = " alibaba-mnn"
+
+# ===============================================================
+# for Tencents-ncnn
+IMAGE_INSTALL_append = " tencent-ncnn"
 
 # ===============================================================
 IMAGE_INSTALL += "openssh sudo"
