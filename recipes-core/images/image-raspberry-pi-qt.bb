@@ -52,6 +52,11 @@ IMAGE_INSTALL_append = " alibaba-mnn"
 IMAGE_INSTALL_append = " tencent-ncnn"
 
 # ===============================================================
+# for camera
+IMAGE_INSTALL_append = " libmipi-camera"
+
+
+# ===============================================================
 IMAGE_INSTALL += "openssh sudo"
 
 IMAGE_INSTALL += "tzdata"
