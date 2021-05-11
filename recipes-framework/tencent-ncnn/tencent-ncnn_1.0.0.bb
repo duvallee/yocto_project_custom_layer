@@ -15,6 +15,7 @@ LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=8c8b5b19ef89ee9cfa47e768aa904935"
 # --------------------------------------------------------
 DEPENDS += "protobuf \
             protobuf-native \
+            glibc \
             "
 
 # --------------------------------------------------------
@@ -36,12 +37,17 @@ BUILD_CXXFLAGS += "-std=c++11 -fPIC"
 inherit cmake 
 
 # --------------------------------------------------------
+do_install_append() {
+   install -d ${D}${libdir}
 
+   install -m 0755 ${B}/src/libncnn.a ${D}${libdir}
+}
 # --------------------------------------------------------
 
 
 # --------------------------------------------------------
 PACKAGES_${PN} += "${libdir}/* ${includedir}/*"
+PACKAGES_${PN}-dev += "${libdir}/* ${includedir}/*"
 PACKAGES_${PN}-staticdev += "${libdir}/* ${includedir}/*"
 
 FILES_${PN} += "${libdir}/* ${includedir}/*"
