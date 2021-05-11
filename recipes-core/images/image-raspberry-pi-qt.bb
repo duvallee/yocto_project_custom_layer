@@ -40,8 +40,11 @@ IMAGE_INSTALL_append = " libgomp libgomp-dev libgomp-staticdev"
 
 # ===============================================================
 # for tensorflow-lite
-IMAGE_INSTALL_append = " flatbuffers"
-IMAGE_INSTALL_append = " tensorflow-lite tensorflow-lite-staticdev"
+# IMAGE_INSTALL_append = " flatbuffers flatbuffers-staticdev"
+# IMAGE_INSTALL_append = " tensorflow-lite tensorflow-lite-staticdev"
+
+TOOLCHAIN_TARGET_TASK_append = " flatbuffers-staticdev"
+TOOLCHAIN_TARGET_TASK_append = " tensorflow-lite-staticdev"
 
 # ===============================================================
 # for alibaba-mnn 
@@ -49,7 +52,8 @@ IMAGE_INSTALL_append = " alibaba-mnn"
 
 # ===============================================================
 # for Tencents-ncnn
-IMAGE_INSTALL_append = " tencent-ncnn"
+# IMAGE_INSTALL_append = " tencent-ncnn"
+TOOLCHAIN_TARGET_TASK_append = " tencent-ncnn-staticdev"
 
 # ===============================================================
 # for camera
