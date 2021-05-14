@@ -57,8 +57,8 @@ TOOLCHAIN_TARGET_TASK_append = " tencent-ncnn-staticdev"
 
 # ===============================================================
 # for camera
-IMAGE_INSTALL_append = " libmipi-camera"
-
+IMAGE_INSTALL_append = " libmipi-camera libmipi-camera-dev"
+IMAGE_INSTALL_append = " ai-camera-opencv"
 
 # ===============================================================
 IMAGE_INSTALL += "openssh sudo"
