@@ -11,6 +11,9 @@ inherit core-image
 
 # ===============================================================
 IMAGE_INSTALL_append = " userland"
+IMAGE_INSTALL_append = " vcdbg"
+
+# ===============================================================
 IMAGE_INSTALL_append = " wayland"
 IMAGE_INSTALL_append = " kernel-modules"
 
