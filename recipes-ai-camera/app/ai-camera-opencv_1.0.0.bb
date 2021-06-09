@@ -14,7 +14,7 @@ DEPENDS += "userland libmipi-camera-dev flatbuffers tensorflow-lite tencent-ncnn
 LIC_FILES_CHKSUM = "file://README.md;md5=0b95a9c6d7117aa90ab082f82d2395f6"
 
 # ----------------------------------------------------------------
-SRCREV = "afc18adc989e3fb9e25a1627058eb087ef86977b"
+SRCREV = "639a70b46da1abec97f5febf0d425f0b3fbda3ec"
 APP_BRANCH = "raspberrypi-camera-opencv"
 
 SRC_URI = "git://git@github.com/duvallee/image-processing.git;branch=${APP_BRANCH};protocol=ssh"

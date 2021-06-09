@@ -83,6 +83,9 @@ IMAGE_INSTALL += "python3-numpy"
 IMAGE_INSTALL += "python3-pyyaml"
 IMAGE_INSTALL += "python3-ply"
 
+IMAGE_INSTALL += "htop"
+IMAGE_INSTALL += "gdb"
+
 # ===============================================================
 IMAGE_INSTALL += " \ 
    qtbase \
@@ -128,6 +131,8 @@ IMAGE_INSTALL += " \
    ttf-dejavu-serif  \
    ttf-dejavu-serif-condensed  \
    ttf-dejavu-common \
+   \
+   qwt-qt5 \
    \
    qtwayland \
    \
