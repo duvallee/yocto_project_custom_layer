@@ -1,0 +1,42 @@
+diff -aurN old/arch/arm/boot/dts/bcm2711-rpi-4-b.dts new/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
+--- old/arch/arm/boot/dts/bcm2711-rpi-4-b.dts	2021-05-28 12:38:55.575069517 +0900
++++ new/arch/arm/boot/dts/bcm2711-rpi-4-b.dts	2021-07-07 17:58:20.138632191 +0900
+@@ -306,6 +306,38 @@
+ 	status = "okay";
+ };
+ 
++&uart2 {
++	pinctrl-names = "default";
++	status = "okay";
++};
++
++&uart3 {
++	pinctrl-names = "default";
++	status = "okay";
++};
++
++&uart4 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart4_pins>;
++	status = "okay";
++};
++
++&uart5 {
++	pinctrl-names = "default";
++	status = "okay";
++};
++
++&i2c3 {
++  pinctrl-0 = <&i2c3_pins>;
++  status = "okay";
++};
++
++&i2c5 {
++  pinctrl-0 = <&i2c5_pins>;
++  status = "okay";
++};
++
++
+ &vchiq {
+ 	interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
+ };
