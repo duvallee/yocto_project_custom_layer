@@ -33,4 +33,11 @@ do_deploy_append() {
    sed -i '/#gpu_mem=/ c\gpu_mem=128' ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
    sed -i '/#disable_overscan=/ c\disable_overscan=1' ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
 
+   echo "[all]" >> ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
+   echo "enable_uart=1" >> ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
+   echo "dtoverlay=uart1" >> ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
+   echo "dtoverlay=uart2" >> ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
+   echo "dtoverlay=uart3" >> ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
+   echo "dtoverlay=uart4" >> ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
+   echo "dtoverlay=uart5" >> ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
 }

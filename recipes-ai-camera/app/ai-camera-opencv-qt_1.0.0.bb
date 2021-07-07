@@ -2,20 +2,23 @@
 #
 #
 # ----------------------------------------------------------------
-DESCRIPTION = "A camera sample for raspberry pi"
+DESCRIPTION = "A camera qt sample for raspberry pi"
 SUMMARY = ""
 LICENSE = "CLOSED"
 
 # ----------------------------------------------------------------
 DEPENDS += "userland libmipi-camera-dev flatbuffers tensorflow-lite tencent-ncnn alibaba-mnn opencv"
-# RDEPENDS_${PN} += "libmipi-camera.so"
+DEPENDS += "qtbase"
+
+# ----------------------------------------------------------------
+# RDEPENDS_qt-swipeview-sample_append = "bash systemd "
 
 # ----------------------------------------------------------------
 LIC_FILES_CHKSUM = "file://README.md;md5=0b95a9c6d7117aa90ab082f82d2395f6"
 
 # ----------------------------------------------------------------
-SRCREV = "afc18adc989e3fb9e25a1627058eb087ef86977b"
-APP_BRANCH = "raspberrypi-camera-opencv"
+SRCREV = "1b55343dd5d3de8033c31eb1b8b1db6c4dccf63d"
+APP_BRANCH = "raspberrypi-camera-opencv-qt"
 
 SRC_URI = "git://git@github.com/duvallee/image-processing.git;branch=${APP_BRANCH};protocol=ssh"
 
@@ -23,25 +26,25 @@ SRC_URI = "git://git@github.com/duvallee/image-processing.git;branch=${APP_BRANC
 S = "${WORKDIR}/git"
 
 # ----------------------------------------------------------------
-# inherit pkgconfig
-
-# ----------------------------------------------------------------
-do_configure() {
-   bbplain ""
+do_compile_prepend() {
+   export OECORE_TARGET_SYSROOT="${RECIPE_SYSROOT}"
 }
 
 # ----------------------------------------------------------------
-EXTRA_OEMAKE = "OECORE_TARGET_SYSROOT=${RECIPE_SYSROOT}"
+inherit qmake5 pkgconfig
 
 # ----------------------------------------------------------------
 do_install() {
    # bbplain "---------------------------------------------"
 
+   # -------------------------------------------------------------
    install -d ${D}${bindir}
    install -d ${D}/usr/share/deep_learning_camera/training_data
 
-   install -m 0755 ${S}/deep_learning_camera_opencv ${D}${bindir}
+   # -------------------------------------------------------------
+   install -m 0755 ${B}/qt-deeplearning-camera ${D}${bindir}
 
+   # -------------------------------------------------------------
    install -m 0755 ${S}/training_data/COCO_detect.tflite ${D}/usr/share/deep_learning_camera/training_data
    install -m 0755 ${S}/training_data/COCO_labels.txt ${D}/usr/share/deep_learning_camera/training_data
 
@@ -58,10 +61,6 @@ do_install() {
 
    install -m 0755 ${S}/training_data/version-RFB-320_simplified.onnx ${D}/usr/share/deep_learning_camera/training_data
 }
-
-# ----------------------------------------------------------------
-INSANE_SKIP_${PN} += "dev-deps"
-# INSANE_SKIP_${PN} += "file-rdeps"
 
 # ----------------------------------------------------------------
 FILES_${PN} += "${bindir}/* /usr/share/deep_learning_camera/training_data/*"
