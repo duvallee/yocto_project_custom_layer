@@ -71,6 +71,10 @@ IMAGE_INSTALL_append = " dhcp-client"
 IMAGE_INSTALL_append = " linux-firmware"
 
 # ===============================================================
+# for lsusb 
+IMAGE_INSTALL_append = " usbutils"
+
+# ===============================================================
 IMAGE_INSTALL += "openssh sudo"
 
 IMAGE_INSTALL += "tzdata"
