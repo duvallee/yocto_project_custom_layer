@@ -1,4 +1,4 @@
 
-PACKAGECONFIG_append := "dnn text "
+PACKAGECONFIG_append := " dnn text "
 # PARALLEL_MAKE = ""
 PARALLEL_MAKEINST = ""
