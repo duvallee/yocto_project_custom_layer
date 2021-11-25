@@ -156,6 +156,16 @@ IMAGE_INSTALL += "qt-example"
 #
 IMAGE_INSTALL += "ros-core "
 
+# demos for ros2's galactic
+IMAGE_INSTALL += "action-tutorials-cpp action-tutorials-interfaces action-tutorials-py "
+IMAGE_INSTALL += "composition "
+IMAGE_INSTALL += "demo-nodes-cpp demo-nodes-cpp-rosnative demo-nodes-py "
+IMAGE_INSTALL += "dummy-map-server dummy-robot-bringup dummy-sensors "
+IMAGE_INSTALL += "image-tools intra-process-demo lifecycle logging-demo "
+IMAGE_INSTALL += "pendulum-control pendulum-msgs "
+IMAGE_INSTALL += "quality-of-service-demo-cpp quality-of-service-demo-py "
+IMAGE_INSTALL += "topic-monitor topic-statistics-demo "
+
 # ===============================================================
 # for SDK
 TOOLCHAIN_HOST_TASK_append = " nativesdk-flatbuffers-compiler"
