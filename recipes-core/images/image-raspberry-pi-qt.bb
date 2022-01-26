@@ -156,6 +156,7 @@ IMAGE_INSTALL += "qt-example"
 #
 IMAGE_INSTALL += "ros-core "
 
+# changed from galactic to foxy of ros2 on 26 Jan 2022
 # demos for ros2's galactic
 IMAGE_INSTALL += "action-tutorials-cpp action-tutorials-interfaces action-tutorials-py "
 IMAGE_INSTALL += "composition "
@@ -164,7 +165,9 @@ IMAGE_INSTALL += "dummy-map-server dummy-robot-bringup dummy-sensors "
 IMAGE_INSTALL += "image-tools intra-process-demo lifecycle logging-demo "
 IMAGE_INSTALL += "pendulum-control pendulum-msgs "
 IMAGE_INSTALL += "quality-of-service-demo-cpp quality-of-service-demo-py "
-IMAGE_INSTALL += "topic-monitor topic-statistics-demo "
+# topic-statics-demo is only in galatic and rolling of ros2
+# IMAGE_INSTALL += "topic-monitor topic-statistics-demo "
+IMAGE_INSTALL += "topic-monitor "
 
 # ===============================================================
 # for SDK
