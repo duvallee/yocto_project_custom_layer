@@ -94,6 +94,8 @@ IMAGE_INSTALL += "python3-numpy"
 IMAGE_INSTALL += "python3-pyyaml"
 IMAGE_INSTALL += "python3-ply"
 
+IMAGE_INSTALL += "python3-pyqt5"
+
 IMAGE_INSTALL += "htop"
 IMAGE_INSTALL += "gdb"
 
