@@ -19,7 +19,7 @@ LIC_FILES_CHKSUM = "file://README.md;md5=0b95a9c6d7117aa90ab082f82d2395f6"
 SRCREV = "e83e8621892a8cbb288988d8bae00b0303c8f9d7"
 LIBMIPI_CAMERA_BRANCH = "raspberrypi-camera-library"
 
-SRC_URI = "git://git@github.com/duvallee/image-processing.git;branch=${LIBMIPI_CAMERA_BRANCH};protocol=ssh"
+SRC_URI = "git://git@github.com/duvallee/raspberrypi-app.git;branch=${LIBMIPI_CAMERA_BRANCH};protocol=ssh"
 
 # ----------------------------------------------------------------
 S = "${WORKDIR}/git"

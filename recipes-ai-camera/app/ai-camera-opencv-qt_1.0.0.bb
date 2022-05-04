@@ -20,7 +20,7 @@ LIC_FILES_CHKSUM = "file://README.md;md5=0b95a9c6d7117aa90ab082f82d2395f6"
 SRCREV = "1b55343dd5d3de8033c31eb1b8b1db6c4dccf63d"
 APP_BRANCH = "raspberrypi-camera-opencv-qt"
 
-SRC_URI = "git://git@github.com/duvallee/image-processing.git;branch=${APP_BRANCH};protocol=ssh"
+SRC_URI = "git://git@github.com/duvallee/raspberrypi-app.git;branch=${APP_BRANCH};protocol=ssh"
 
 # ----------------------------------------------------------------
 S = "${WORKDIR}/git"
