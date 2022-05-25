@@ -7,4 +7,5 @@ alias ll='ls -al'
 
 export LANG=en_US.UTF-8
 
+source /etc/profile.d/ros/local_setup.sh
 
