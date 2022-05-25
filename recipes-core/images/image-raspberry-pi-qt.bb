@@ -89,15 +89,18 @@ IMAGE_INSTALL += "tiff"
 
 # IMAGE_INSTALL += " meson"
 
+IMAGE_INSTALL += "htop"
+IMAGE_INSTALL += "gdb"
+
+# ===============================================================
+# for python3
 IMAGE_INSTALL += "python3"
 IMAGE_INSTALL += "python3-numpy"
 IMAGE_INSTALL += "python3-pyyaml"
 IMAGE_INSTALL += "python3-ply"
+# IMAGE_INSTALL += "python3-pip"
 
 IMAGE_INSTALL += "python3-pyqt5"
-
-IMAGE_INSTALL += "htop"
-IMAGE_INSTALL += "gdb"
 
 # ===============================================================
 IMAGE_INSTALL += " \ 
@@ -167,6 +170,16 @@ IMAGE_INSTALL += "demo-nodes-cpp demo-nodes-cpp-rosnative demo-nodes-py "
 IMAGE_INSTALL += "dummy-map-server dummy-robot-bringup dummy-sensors "
 IMAGE_INSTALL += "image-tools intra-process-demo lifecycle logging-demo "
 IMAGE_INSTALL += "pendulum-control pendulum-msgs "
+
+# ---------------------------------------------------------------
+# for rqt-graph for ros2
+IMAGE_INSTALL += "sip3 "
+IMAGE_INSTALL += "python3-pydot "
+IMAGE_INSTALL += "qtsvg "
+IMAGE_INSTALL += "python-qt-binding "
+IMAGE_INSTALL += "rqt-graph "
+# ---------------------------------------------------------------
+
 IMAGE_INSTALL += "quality-of-service-demo-cpp quality-of-service-demo-py "
 # topic-statics-demo is only in galatic and rolling of ros2
 # IMAGE_INSTALL += "topic-monitor topic-statistics-demo "
