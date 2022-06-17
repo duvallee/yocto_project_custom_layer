@@ -187,10 +187,6 @@ IMAGE_INSTALL += " ros-core"
 # IMAGE_INSTALL += " rqt-graph"
 
 # ---------------------------------------------------------------
-# app for ros2
-IMAGE_INSTALL += " spotmicro-ros"
-
-# ---------------------------------------------------------------
 # micro-ros-agent
 IMAGE_INSTALL += " ament-cmake"
 # IMAGE_INSTALL += " microxrcedds_agent"
@@ -230,7 +226,6 @@ IMAGE_INSTALL += " tinyxml2-vendor"
 IMAGE_INSTALL += " spdlog"
 IMAGE_INSTALL += " rosidl-generator-dds-idl"
 IMAGE_INSTALL += " rmw-dds-common"
-IMAGE_INSTALL += " googletest"
 IMAGE_INSTALL += " json-glib"
 IMAGE_INSTALL += " json-c"
 # IMAGE_INSTALL += " cli11"
@@ -242,15 +237,13 @@ TOOLCHAIN_TARGET_TASK_append = " libc-staticdev"
 TOOLCHAIN_TARGET_TASK_append = " foonathan-memory-staticdev"
 #
 
-# eProsima
-# IMAGE_INSTALL += " fast-cdr"
-# IMAGE_INSTALL += " micro-cdr"
-# IMAGE_INSTALL += " fast-dds"
-
-
 # ############################################################### 
 #
-# IMAGE_INSTALL += " micro-ros-agent"
+IMAGE_INSTALL += " micro-xrce-dds-agent"
+
+# ---------------------------------------------------------------
+# app for ros2
+IMAGE_INSTALL += " spotmicro-ros"
 
 # ---------------------------------------------------------------
 
