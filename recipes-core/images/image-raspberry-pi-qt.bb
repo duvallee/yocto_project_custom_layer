@@ -164,7 +164,6 @@ IMAGE_INSTALL += " python-example"
 # ROS2 foxy
 IMAGE_INSTALL += " ros-core"
 
-
 # changed from galactic to foxy of ros2 on 26 Jan 2022
 # demos for ros2's galactic
 # IMAGE_INSTALL += " action-tutorials-cpp action-tutorials-interfaces action-tutorials-py"
@@ -231,7 +230,13 @@ IMAGE_INSTALL += " json-c"
 # IMAGE_INSTALL += " cli11"
 IMAGE_INSTALL += " gcc-sanitizers"
 
-# for foonathan-memory
+
+# ---------------------------------------------------------------
+# for toolchain
+TOOLCHAIN_TARGET_TASK_append = " ament-cmake"
+TOOLCHAIN_TARGET_TASK_append = " ament-package"
+TOOLCHAIN_TARGET_TASK_append = " rclcpp"
+TOOLCHAIN_TARGET_TASK_append = " std-msgs"
 TOOLCHAIN_TARGET_TASK_append = " libstdc++-staticdev"
 TOOLCHAIN_TARGET_TASK_append = " libc-staticdev"
 TOOLCHAIN_TARGET_TASK_append = " foonathan-memory-staticdev"
