@@ -247,8 +247,9 @@ TOOLCHAIN_TARGET_TASK_append = " foonathan-memory-staticdev"
 IMAGE_INSTALL += " micro-xrce-dds-agent"
 
 # ---------------------------------------------------------------
-# app for ros2
+# app for SpotMicro 
 IMAGE_INSTALL += " spotmicro-ros"
+IMAGE_INSTALL += " stm32-mcu-reset"
 
 # ---------------------------------------------------------------
 
