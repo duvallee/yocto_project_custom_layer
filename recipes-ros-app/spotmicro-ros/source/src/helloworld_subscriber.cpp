@@ -5,6 +5,7 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
+#include "std_msgs/msg/int32.hpp"
 
 using std::placeholders::_1;
 
@@ -22,8 +23,9 @@ public:
 private:
    void subscribe_topic_message(const std_msgs::msg::Int32::SharedPtr msg) const
    {
-      RCLCPP_INFO(this->get_logger(), "Received message: '%d'", msg->data.Int32());
+      RCLCPP_INFO(this->get_logger(), "Received message: '%d'", msg->data);
    }
+
    rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr helloworld_subscriber_;
 };
 
